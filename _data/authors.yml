@@ -1,0 +1,193 @@
+typelevel:
+  full_name: "Typelevel"
+  portrait: "/img/logo-twitter.png"
+  twitter: "typelevel"
+larsrh:
+  full_name: "Lars Hupel"
+  portrait: "https://avatars2.githubusercontent.com/u/923079?v=2&s=80"
+  twitter: "larsr_h"
+  github: "larsrh"
+non:
+  full_name: "Erik Osheim"
+  portrait: "https://secure.gravatar.com/avatar/f4d569c5f1eaa0241c0d39717da9315c"
+  twitter: "d6"
+  github: "non"
+milessabin:
+  full_name: "Miles Sabin"
+  portrait: "https://secure.gravatar.com/avatar/8a7e159fad28f672ca794fb7f2bf7f0f"
+  twitter: "milessabin"
+  github: "milessabin"
+tixxit:
+  full_name: "Tom Switzer"
+  portrait: "https://secure.gravatar.com/avatar/b2ecd194174398696f1d9a80bf6a14fa"
+  twitter: "tixxit"
+  github: "tixxit"
+S11001001:
+  full_name: "Stephen Compall"
+  portrait: "https://secure.gravatar.com/avatar/f3c712c1536240de32d4ecfc039f80aa"
+  twitter: "S11001001"
+  github: "S11001001"
+adelbertc:
+  full_name: "Adelbert Chang"
+  portrait: "https://secure.gravatar.com/avatar/fb8e986500c5059b2a6c0b2184bb0faf"
+  twitter: "adelbertchang"
+  github: "adelbertc"
+  bio: "Adelbert is an engineer at Box where he attempts to reliably copy bytes from one machine to another. He enjoys writing pure functional programs, teaching functional programming, and learning more about computing."
+channingwalton:
+  full_name: "Channing Walton"
+  portrait: "https://secure.gravatar.com/avatar/560f2f6f76ad8a88a729d8cf684ea6f3"
+  twitter: "channingwalton"
+  github: "channingwalton"
+puffnfresh:
+  full_name: "Brian McKenna"
+  portrait: "https://secure.gravatar.com/avatar/f8a34d29224f05cd8bd1f480c89cf112"
+  twitter: "puffnfresh"
+  github: "puffnfresh"
+davegurnell:
+  full_name: "Dave Gurnell"
+  portrait: "https://secure.gravatar.com/avatar/6cf3fbc6afb50515276a614cf44bfef9"
+  twitter: "davegurnell"
+  github: "davegurnell"
+  bio: "Dave Gurnell is a Scala consultant and developer working for Underscore in London, UK. He has been a Scala developer since 2010 and a functional programmer for nearly a decade."
+sweirich:
+  full_name: "Stephanie Weirich"
+  portrait: "https://avatars2.githubusercontent.com/u/2103670?v=2&s=80"
+  github: "sweirich"
+  twitter: "fancytypes"
+  bio: "Stephanie Weirich is a Professor at the University of Pennsylvania. Her research centers on programming languages, type theory and machine-assisted reasoning. In particular, she studies generic programming, metaprogramming, dependent type systems, and type inference in the context of functional programming languages. She is currently an Editor of the Journal of Functional Programming and served as the program chair for ICFP in 2010 and the Haskell Symposium in 2009."
+cvogt:
+  full_name: "Chris Vogt"
+  portrait: "https://avatars0.githubusercontent.com/u/274947?v=2&s=80"
+  github: "cvogt"
+  twitter: "cvogt"
+  bio: "Slick co-author, Compossible records author, frequent Scala conference/user group speaker, former member of Martin's team at LAMP/EPFL, based in NYC, Senior Software Engineer at x.ai"
+clhodapp:
+  full_name: "Chris Hodapp"
+  portrait: "https://avatars3.githubusercontent.com/u/108633?v=2&s=80"
+  github: "clhodapp"
+  twitter: "clhodapp"
+  bio: "Several-time Scala GSOC student and eventually mentor, author of the ill-fated Comprehensive Comprehensions project. He's hoping to see tooling and techniques from the FP/Typelevel community improve the leverage of the average developer. Based in the SF Bay Area."
+raulraja:
+  full_name: "Raul Raja"
+  portrait: "https://avatars0.githubusercontent.com/u/456796?v=2&s=80"
+  github: "raulraja"
+  twitter: "raulraja"
+  bio: "Raul Raja is a functional programming enthusiast, CTO and Co-founder at 47 Degrees, a functional programming consultancy specialized in Scala."
+noelwelsh:
+  full_name: "Noel Welsh"
+  portrait: "https://pbs.twimg.com/profile_images/3058988676/49f0ea302bd82c0355f72b6bc6dac09c_80x80.png"
+  github: "noelwelsh"
+  bio: "Noel Welsh is a partner at Underscore, a consultancy that specializes in Scala. He’s been using Scala for 6 years in all sorts of applications. He’s the author of Advanced Scala, which is in the process of being rewritten to use Cats."
+dreadedsoftware:
+  full_name: "Marcus Henry, Jr."
+  portrait: "https://pbs.twimg.com/profile_images/573668978502934528/_kkdpOjb.jpeg"
+  twitter: "dreadedsoftware"
+  github: "dreadedsoftare"
+  bio: "Marcus Henry is a Software Engineer for a small Defense Contractor. They are a C++, Java and Javascript shop, however, the product he leads is Functional Scala. He mainly works in big data and modeling. In his experience, FP fits these needs much better than OO could have."
+sellout:
+  full_name: "Greg Pfeil"
+  portrait: "https://avatars3.githubusercontent.com/u/33031?v=3&s=80"
+  twitter: "sellout"
+  github: "sellout"
+  bio: "Greg Pfeil was introduced to Scala by SlamData almost two years ago. Prior to that, he was consulting, doing primarily Common Lisp and Haskell work for most of a decade. Aside from working on SlamData’s Quasar core, he spends time on Matryoshka, Idris, and developing his own languages."
+mpilquist:
+  full_name: "Michael Pilquist"
+  portrait: "https://avatars1.githubusercontent.com/u/118078?v=3&s=80"
+  twitter: "mpilquist"
+  github: "mpilquist"
+  bio: "Michael Pilquist is the author of Scodec, a suite of open source Scala libraries for working with binary data, and Simulacrum, a library that simplifies working with type classes. He is also a committer on a number of other projects in the Scala ecosystem, including Cats and FS2. He is also the chief software architect at Combined Conditional Access Development (CCAD), a joint venture between Comcast and ARRIS, Inc., where he is responsible for the design and development of control systems that manage tens of millions of cable system devices, including set-top boxes and head-end equipment."
+fthomas:
+  full_name: "Frank Thomas"
+  portrait: "https://avatars2.githubusercontent.com/u/141252?v=3&s=80"
+  github: "fthomas"
+  bio: "Frank is a physicist by education and a programmer by profession, currently working in a telecommunications company. He started programming in Scala in 2011 and is a contributor to scalaz-stream and cats. Most of his Scala work is done in his free time."
+cheng:
+  full_name: "Dr Eugenia Cheng"
+  portrait: "https://pbs.twimg.com/profile_images/767917112358830080/dy1Xux_7_400x400.jpg"
+  twitter: "DrEugeniaCheng"
+  bio: "Eugenia Cheng is a Senior Lecturer (Associate Professor) of Pure Mathematics in the School of Mathematics and Statistics, University of Sheffield, UK."
+alexandru:
+  full_name: "Alexandru Nedelcu"
+  portrait: "https://avatars2.githubusercontent.com/u/11753?v=3&s=80"
+  github: "alexandru"
+  bio: "Alexandru has been a professional software developer for about 10 years and has used Scala both for work and for personal projects for the last 4 years. He has first introduced Scala at the startup he was working on back then."
+cwmyers:
+  full_name: "Chris Myers"
+  portrait: "/img/media/speakers/chrismyers.jpg"
+  bio: "Chris is an experienced FP/Scala dev working at REA Group, Australia's largest Property website. He uses Scala daily in building the next generation APIs for our business. He also curates http://functionaltalks.org and is the creator of Monet.js (http://cwmyers.github.io/monet.js/), a powerful monad library for JS."
+jqno:
+  full_name: "Jan Ouwens"
+  portrait: "https://avatars0.githubusercontent.com/u/862385?v=3&s=80"
+  bio: "Jan Ouwens is a Scala developer at Codestar and has worked and experimented with Scala and Akka for the past five years. He has worked on a wide variety of projects over the years in the fields of service management, electron microscopes, banking, and the operation of trains. He has a polyglot mindset, having worked with a wide variety of languages such as Java, C#, Jess/Clips and yes, even VBscript."
+jmerritt:
+  full_name: "Jonathan Merritt"
+  portrait: "/img/media/speakers/jonathanmerritt.jpg"
+  bio: "Jonathan Merritt is a software engineer in the finance sector in Australia, writing code in Haskell and Scala to support data scientists to develop large-scale predictive models. Before joining the tech industry 2 years ago, he completed a PhD on equine biomechanics followed by 10 years on the post-doc treadmill; dissecting human cadavers, building photogrammetrically-guided robots, testing horseshoes that had an in-built inertial navigation system, and doing motion capture in horses."
+dialelo:
+  full_name: "Alejandro Gómez"
+  portrait: "/img/media/speakers/alejandrogomez.jpg"
+  bio: "Alejandro is a functional programing enthusiast with a lot of experience with dynamic languages, specially Clojure. He's the author of the Clojure cats library (https://github.com/funcool/cats) which predates Scala's cats, and has been trying to map pure FP concepts to Clojure as an experiment for quite some time. He recently started working for 47degrees writing Scala and has started the Fetch project, similar to Facebook's Haxl project (Haskell, open source) and Twitter's Stitch (Scala, not open sourced)."
+smarter:
+  full_name: "Guillaume Martres"
+  portrait: "/img/media/speakers/guillaumemartres.jpg"
+  bio: "Compiler Engineer at EPFL working on Dotty. He's currently working on incremental compilation support using sbt."
+dwijnand:
+  full_name: "Dale Wijnand"
+  portrait: "https://avatars2.githubusercontent.com/u/344610?v=3&s=80"
+  bio: "Dale is an active OSS contributor, typically in Scala, and an sbt maintainer."
+InTheNow:
+  full_name: "Alistair Johnson"
+  portrait: "https://avatars3.githubusercontent.com/u/5887373?v=3&s=80"
+  bio: "Alistair has been programming for far too long, for far too many companies, but as a dedicated type fan, not long enough in Scala."
+chrisokasaki:
+  full_name: "Chris Okasaki"
+  portrait: "https://avatars2.githubusercontent.com/u/19372370?v=3&s=80"
+  github: "chrisokasaki"
+sofiacole:
+  full_name: "Sofia Cole"
+  portrait: "https://avatars3.githubusercontent.com/u/12714759?v=3&s=80"
+  twitter: "sofiacole35"
+  github: "sofiaaacole"
+  bio: "Sofia Cole is a Scala Developer at ITV and associate at Underscore consulting. She is also a keen contributor to the Scala and tech communities, mostly focusing on making things more approachable and accessible. One of her goals in 2017 is to visit more schools introducing the wonders of programming, especially helping young girls realise their potential. Her favourite things at the moment are reading about dystopian futures, eating pancakes and watching House for the second time through."
+oweinreese:
+  full_name: "Owein Reese"
+  portrait: "https://avatars2.githubusercontent.com/u/515577?v=3&s=80"
+  twitter: "oweinreese"
+  github: "wheaties"
+  bio: "Owein is the Director of Creatives Engineering at MediaMath, an adtech company. His teams have built systems in Scala which handle over 1M req/s with under 10ms latency daily. Originally starting out as a mathematical programmer working in infrared countermeasures, he moved on to become a full fledged software developer involved first with NASA satellite systems and then with hedge fund analytics. Since discovering the joys of functional programming, he’s looked for ways to incorporate higher powered abstractions in all the code he writes, when he gets to write code."
+danielasfregola:
+  full_name: "Daniela Sfregola"
+  portrait: "https://avatars3.githubusercontent.com/u/810447?v=3&s=80"
+  twitter: "DanielaSfregola"
+  github: "DanielaSfregola"
+  bio: "Daniela Sfregola is a Software Consultant based in London, UK. She is an active contributor to the Scala Community and a passionate blogger at danielasfregola.com."
+dscleaver:
+  full_name: "Dave Cleaver"
+  portrait: "https://avatars0.githubusercontent.com/u/139136?v=3&s=80"
+  twitter: "dscleaver"
+  github: "dscleaver"
+  bio: "Dave Cleaver is a Senior Principal Engineer at Comcast designing and implementing scalable Web Services and Platforms. He has spent the last two years developing and championing solutions in Scala. His interests include AI planning, distributed systems, programming languages, and type systems."
+longcao:
+  full_name: "Long Cao"
+  portrait: "https://avatars2.githubusercontent.com/u/865236?v=3&s=80"
+  twitter: "oacgnol"
+  github: "longcao"
+  bio: "Long Cao is a software engineer focusing on Scala, Spark, and data engineering and has been in New York for the last 5 years. He cares deeply about showing newcomers the benefits of Scala and functional programming. On his off time likes to enjoy climbing, Rocket League, music, sports, and coffee."
+ratan:
+  full_name: "Ratan Sebastian"
+  portrait: "https://pbs.twimg.com/profile_images/1749512839/ratcomic.jpg"
+  twitter: "ratansebastian"
+  github: "rjsvaljean"
+  bio: "Ratan is a software developer at x.ai where they’re building a meeting scheduling personal assistant. He’s been programming in Scala for about 5 years and is interested in learning more about pure functional programming and type systems through Scala."
+edmundnoble:
+  full_name: "Edmund Noble"
+  portrait: "https://avatars3.githubusercontent.com/u/1369693?v=3&s=80"
+  github: "edmundnoble"
+  twitter: "edmund_noble"
+  bio: "Edmund loves Scala and code in general, and he is intimately interested in how people code. Purely functional programming is his passion; he is particularly interested in new ways to constrain and abstract in programs. He contributes to a couple of the libraries under the typelevel umbrella, including cats and eff, the last of which he maintains."
+igstan:
+  full_name: "Ionuț G. Stan"
+  portrait: "https://avatars3.githubusercontent.com/u/49002?v=3&s=80"
+  github: "igstan"
+  twitter: "igstan"
+  bio: "Ionuț G. Stan is a software developer at Eloquentix, where he works on backend services using Scala. His current interests revolve around functional programming techniques, programming languages and compilers."

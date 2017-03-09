@@ -1,0 +1,52 @@
+current directory: /home/morpheyesh/code/typelevel.github.com/vendor/bundle/ruby/2.3.0/gems/ffi-1.9.17/ext/ffi_c
+/home/morpheyesh/.rvm/rubies/ruby-2.3.3/bin/ruby -r ./siteconf20170202-17311-5b8mb8.rb extconf.rb 
+checking for ffi_call() in -lffi... yes
+checking for ffi_prep_closure()... yes
+checking for ffi_raw_call()... yes
+checking for ffi_prep_raw_closure()... yes
+checking for rb_thread_blocking_region()... no
+checking for rb_thread_call_with_gvl()... yes
+checking for rb_thread_call_without_gvl()... yes
+checking for ffi_prep_cif_var()... yes
+creating extconf.h
+creating Makefile
+
+To see why this extension failed to compile, please check the mkmf.log which can be found here:
+
+  /home/morpheyesh/code/typelevel.github.com/vendor/bundle/ruby/2.3.0/extensions/x86_64-linux/2.3.0/ffi-1.9.17/mkmf.log
+
+current directory: /home/morpheyesh/code/typelevel.github.com/vendor/bundle/ruby/2.3.0/gems/ffi-1.9.17/ext/ffi_c
+make "DESTDIR=" clean
+
+current directory: /home/morpheyesh/code/typelevel.github.com/vendor/bundle/ruby/2.3.0/gems/ffi-1.9.17/ext/ffi_c
+make "DESTDIR="
+compiling Buffer.c
+compiling MethodHandle.c
+compiling LongDouble.c
+compiling LastError.c
+compiling DataConverter.c
+compiling ClosurePool.c
+compiling Types.c
+compiling Function.c
+compiling ArrayType.c
+compiling Platform.c
+compiling AbstractMemory.c
+compiling StructByReference.c
+compiling StructLayout.c
+compiling ffi.c
+compiling DynamicLibrary.c
+compiling Variadic.c
+compiling Struct.c
+compiling MemoryPointer.c
+compiling Type.c
+compiling Call.c
+compiling FunctionInfo.c
+compiling MappedType.c
+compiling StructByValue.c
+compiling Thread.c
+compiling Pointer.c
+linking shared-object ffi_c.so
+
+current directory: /home/morpheyesh/code/typelevel.github.com/vendor/bundle/ruby/2.3.0/gems/ffi-1.9.17/ext/ffi_c
+make "DESTDIR=" install
+/usr/bin/install -m 0755 ffi_c.so ./.gem.20170202-17311-1noyvrw

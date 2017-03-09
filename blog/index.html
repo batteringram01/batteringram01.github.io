@@ -1,0 +1,73 @@
+---
+layout: default
+title: Blog
+---
+<div class="content content-small pull-left">
+  <div class="posts">
+    {% for post in paginator.posts %}
+    <div class="post js-fade-in">
+      <h2>
+        <a href="{{ post.url }}">{{ post.title }}</a>
+      </h2>
+      <p>{{post.content | strip_html | truncatewords: 50}}</p>
+      <div class="post__meta">
+
+ <b>        on {{ post.date | date: "%b %d, %Y" }}</p> </b>
+      </div>
+    </div>
+    {% endfor %}
+
+    <!-- Pagination links -->
+    <div class="pagination js-fade-in">
+      {% if paginator.previous_page %}
+        <a href="{{ paginator.previous_page_path }}" class="btn text prev">Previous</a>
+      {% endif %}
+      {% if paginator.next_page %}
+        <a href="{{ paginator.next_page_path }}" class="btn text next">Next</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div class="sidebar js-fade-in">
+  <h4>About me</h4>
+  <p class="sidebar__about">
+  Cloud enabled, higher-kinded being, a polyglot programmer with interest in functional programming, DevOps and distributed systems.
+  </p>
+
+	<h4>Archive</h4>
+	<p class="sidebar__about">
+		<a href="/blog/archive.html">All posts</a>
+	</p>
+
+  <h4>Categories</h4>
+  <p>
+
+    <div style="display:inline-block;margin-left:.5em;">
+    Browse by <a href="/blog/category/">Category</a> or <a href="/blog/tag/">Tag</a>
+</div>
+  <!--  <a href="/category/{{ category[0] }}/" style="text-decoration: none;">{% if category[0] == 'aws' %}{{ category[0] | upcase }}{% else %}{{ category[0] | capitalize }}{% endif %}</a><br /> -->
+  <!--  <ul>
+    	{% for page in site.posts %}
+    		<li>
+    			<a href="{{ page.url }}">{{ page.title }}</a>
+    			({{ page.date | date: "%B %Y" }})
+    		</li>
+    	{% endfor %}
+    </ul> -->
+<ul>
+   {% for page in site.categories %}
+   <li> {{page.title}} </li>
+   {% endfor %}
+
+</ul>
+
+
+
+</p>
+
+
+  <h4>Follow me</h4>
+  <a class="btn text" href="/blog/feed.rss">Subscribe via RSS</a>
+  <a class="btn text" href="//twitter.com/{{ site.twitter }}">Follow us on Twitter</a>
+</div>

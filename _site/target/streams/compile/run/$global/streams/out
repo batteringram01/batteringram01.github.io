@@ -1,0 +1,23 @@
+[0m[[0minfo[0m] [0mRunning org.typelevel.blog.Main [0m
+[0m[[0mdebug[0m] [0mWaiting for threads to exit or System.exit to be called.[0m
+[0m[[0mdebug[0m] [0m  Classpath:[0m
+[0m[[0mdebug[0m] [0m	/home/morpheyesh/code/typelevel.github.com/target/scala-2.11/classes[0m
+[0m[[0mdebug[0m] [0m	/home/morpheyesh/.ivy2/cache/org.scala-lang/scala-library/jars/scala-library-2.11.8.jar[0m
+[0m[[0mdebug[0m] [0m	/home/morpheyesh/.ivy2/cache/io.get-coursier/coursier_2.11/jars/coursier_2.11-1.0.0-M14.jar[0m
+[0m[[0mdebug[0m] [0m	/home/morpheyesh/.ivy2/cache/org.scalaz/scalaz-core_2.11/bundles/scalaz-core_2.11-7.2.5.jar[0m
+[0m[[0mdebug[0m] [0m	/home/morpheyesh/.ivy2/cache/com.lihaoyi/fastparse_2.11/jars/fastparse_2.11-0.3.7.jar[0m
+[0m[[0mdebug[0m] [0m	/home/morpheyesh/.ivy2/cache/com.lihaoyi/fastparse-utils_2.11/jars/fastparse-utils_2.11-0.3.7.jar[0m
+[0m[[0mdebug[0m] [0m	/home/morpheyesh/.ivy2/cache/com.lihaoyi/sourcecode_2.11/jars/sourcecode_2.11-0.1.1.jar[0m
+[0m[[0mdebug[0m] [0m	/home/morpheyesh/.ivy2/cache/org.jsoup/jsoup/jars/jsoup-1.9.2.jar[0m
+[0m[[0mdebug[0m] [0m	/home/morpheyesh/.ivy2/cache/org.scala-lang.modules/scala-xml_2.11/bundles/scala-xml_2.11-1.0.5.jar[0m
+[0m[[0mdebug[0m] [0m	/home/morpheyesh/.ivy2/cache/io.get-coursier/coursier-cache_2.11/jars/coursier-cache_2.11-1.0.0-M14.jar[0m
+[0m[[0mdebug[0m] [0m	/home/morpheyesh/.ivy2/cache/org.scalaz/scalaz-concurrent_2.11/bundles/scalaz-concurrent_2.11-7.2.5.jar[0m
+[0m[[0mdebug[0m] [0m	/home/morpheyesh/.ivy2/cache/org.scalaz/scalaz-effect_2.11/bundles/scalaz-effect_2.11-7.2.5.jar[0m
+[0m[[0mdebug[0m] [0m	/home/morpheyesh/.ivy2/cache/com.chuusai/shapeless_2.11/bundles/shapeless_2.11-2.3.0.jar[0m
+[0m[[0mdebug[0m] [0m	/home/morpheyesh/.ivy2/cache/org.typelevel/macro-compat_2.11/jars/macro-compat_2.11-1.1.1.jar[0m
+[0m[[0mdebug[0m] [0m	/home/morpheyesh/.ivy2/cache/org.yaml/snakeyaml/bundles/snakeyaml-1.17.jar[0m
+[0m[[0mdebug[0m] [0mWaiting for thread run-main-0 to terminate.[0m
+[0m[[0mdebug[0m] [0m	Thread run-main-0 exited.[0m
+[0m[[0mdebug[0m] [0mInterrupting remaining threads (should be all daemons).[0m
+[0m[[0mdebug[0m] [0mSandboxed run complete..[0m
+[0m[[0mdebug[0m] [0mExited with code 0[0m

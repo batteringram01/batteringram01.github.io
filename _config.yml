@@ -1,0 +1,47 @@
+name: Yeshwanth Kumar
+description:
+twitter: morpheyesh
+email: getintouch@yeshwanthk.com
+author: Yeshwanth Kumar
+
+#gitter: "https://gitter.im/orgs/"
+#google_groups: "https://gro"
+baseurl: http://yeshwanthk.com
+#googlemaps_apikey: "AIzaSyAgMQPpkd_Qq-NYcCggh28PaS82oG-9YoA"
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  hard_wrap: false
+highlighter: rouge
+exclude:
+  ["node_modules", "gulpfile.js", "package.json", "README.md", "CNAME", "vendor", "src", "project/", "build.sbt", "posts"]
+permalink: /blog/:year/:month/:day/:title.html
+paginate: 10
+paginate_path: "/:num/"
+sass:
+  sass_dir: _scss
+  style: compressed
+future: true
+
+gems: [jekyll-paginate]
+
+collections:
+  events:
+    output: true
+    permalink: /event/:year-:month-:title/
+    layout: event
+  projects:
+    output: false
+
+
+# ----------------------- #
+#   3rd Party Settings    #
+# ----------------------- #
+
+# Github repositories
+github_user: morpheyesh
+github_repo_count: 0
+github_show_profile_link: true
+github_skip_forks: true
