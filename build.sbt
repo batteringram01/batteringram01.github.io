@@ -1,6 +1,6 @@
 scalaVersion := "2.11.8"
 
-name := "typelevel-blog-tut"
+name := "yeshwanthk"
 
 scalacOptions ++= Seq(
   "-deprecation",
@@ -31,4 +31,4 @@ enablePlugins(BuildInfoPlugin)
 
 buildInfoKeys := Seq[BuildInfoKey](tutInput, tutOutput, tutVersion)
 
-buildInfoPackage := "org.typelevel.blog"
+buildInfoPackage := "yeshwanthk.blog"

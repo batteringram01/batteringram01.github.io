@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Yeshwanth Kumar | OpenNebula API in Go</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+
+
+    <link rel="mask-icon" href="/img/favicon-safari.svg" color="#F51C2B">
+    <link href="/img/yfavicon.png" rel="icon" type="image/x-icon">
+    <link rel="alternate" href="/blog/feed.rss" title="RSS feed" type="application/rss+xml">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,400italic,700' rel='stylesheet' type='text/css'>
+
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/app.js"></script>
+  </head>
+  <body class="no-js ">
+    <div class="header">
+      <div class="wrapper">
+        <a href="/">
+          <div class="header__logo">
+            Yeshwanth Kumar
+          </div>
+        </a>
+        <a href="#" class="header__menu">
+          Menu
+        </a>
+        <ul class="navigation" role="navigation">
+        <!--  <li >
+            <a href="/projects">Projects</a>
+          </li>
+          <li >
+            <a href="/events">Events</a>
+          </li>
+
+          <li  class="active" >
+            <a href="/blog">Blog</a>
+          </li>
+          <li >
+            <a href="/about.html">About</a> -->
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="wrapper">
+      <div class="content js-fade-in">
+  <h2>OpenNebula API in Go</h2>
+
+  <p>For those who don’t know what <a href="http://opennebula.org/">OpenNebula</a> is, It is a simple, resilient hybrid cloud platform that is very easy to get started. Yes, one(short for OpenNebula) is less complicated and can be set up in few hours. Oh wait, now the most obvious question pops up! so how good is it when compared to OpenStack? Let me try and give a quick answer, OpenStack is a toolkit for building complex IaaS, it has multiple blocks of differnet tools on different layers combined, so with OpenStack you have the ability to tune each block for each need, but in OpenNebula, it is all combined, which makes it a lot easier to get started. I am going to stick to the topic and write about how I wrote an API in golang that talks to OpenNebula to create and control virtual machines. This is the only golang OpenNebula API that is available on github at the time of writing.
+<!--more--></p>
+
+<p><strong>Note: This article assumes that you have golang and opennebula already installed</strong></p>
+
+<h3 id="existing-one-clients">Existing One Clients</h3>
+
+<p>OpenNebula currently support two interfaces, one is the XMLRPC interface and other one is cloud API which supports Ruby and Java.
+If you have worked on integrating OpenNebula or any cloud platform into your web services, you would have come across the <a href="https://github.com/fog/fog">fog</a> project. A kickass ruby library to talk to almost every cloud service that is out there. Really, thanks to <a href="http://fog.io">fog.io</a> folks.</p>
+
+<p>The One gem actually talks to the OpenNebula Ruby Client(<a href="https://github.com/OpenNebula/one/tree/master/src/oca/ruby/opennebula">here</a>) to make the RPC calls to the One RPC server. Some code from the OCA ruby api below</p>
+
+<div class="language-ruby highlighter-rouge"><pre class="highlight"><code>
+        <span class="c1"># Initiates the instance of the VM on the target host.</span>
+        <span class="c1">#</span>
+        <span class="c1"># @param host_id [Interger] The host id (hid) of the target host where</span>
+        <span class="c1">#   the VM will be instantiated.</span>
+        <span class="c1"># @param enforce [true|false] If it is set to true, the host capacity</span>
+        <span class="c1">#   will be checked, and the deployment will fail if the host is</span>
+        <span class="c1">#   overcommited. Defaults to false</span>
+        <span class="c1"># @param ds_id [Integer] The System Datastore where to deploy the VM. To</span>
+        <span class="c1">#   use the default, set it to -1</span>
+        <span class="c1">#</span>
+        <span class="c1"># @return [nil, OpenNebula::Error] nil in case of success, Error</span>
+        <span class="c1">#   otherwise</span>
+        <span class="k">def</span> <span class="nf">deploy</span><span class="p">(</span><span class="n">host_id</span><span class="p">,</span> <span class="n">enforce</span><span class="o">=</span><span class="kp">false</span><span class="p">,</span> <span class="n">ds_id</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">enforce</span> <span class="o">||=</span> <span class="kp">false</span>
+            <span class="n">ds_id</span> <span class="o">||=</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="k">return</span> <span class="n">call</span><span class="p">(</span><span class="no">VM_METHODS</span><span class="p">[</span><span class="ss">:deploy</span><span class="p">],</span>
+                        <span class="vi">@pe_id</span><span class="p">,</span>
+                        <span class="n">host_id</span><span class="p">.</span><span class="nf">to_i</span><span class="p">,</span>
+                        <span class="n">enforce</span><span class="p">,</span>
+                        <span class="n">ds_id</span><span class="p">.</span><span class="nf">to_i</span><span class="p">)</span>
+        <span class="k">end</span>
+
+</code></pre>
+</div>
+<p>### Design and structure</p>
+
+<p>The <a href="https://github.com/megamsys/opennebula-go">opennebula-go</a> api uses XMLRPC interface to manage the VMs.Please note that this project is still under development and I wrote the API to suit our needs at megam and still tried to keep a generic design so anyone can use it. At <a href="https://www.megam.io">megam</a>, we were moving away from Chef’s knife CLI tool to direct OpenNebula RPC calls from our PaaS engine to increase performance. If I find time, I will finish the API fully.</p>
+
+<ul>
+  <li>api - RPC Client</li>
+  <li>compute - VM control</li>
+  <li>templates - Manipulating templates</li>
+  <li>VirtualMachines - Manipulating VMs</li>
+</ul>
+
+<h3 id="rpc-api">RPC API</h3>
+
+<p>RPC api returns an rpc client object, It is passed around in every individual api to make RPC calls to the One server.
+I used this go <a href="https://github.com/kolo/xmlrpc">xmlrpc</a> library.</p>
+
+<div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="x">
+</span><span class="c">/**
+ *
+ * Creates an RPCClient  returns it
+ *
+ **/</span><span class="x">
+</span><span class="k">func</span><span class="x"> </span><span class="n">NewRPCClient</span><span class="p">(</span><span class="n">endpoint</span><span class="x"> </span><span class="kt">string</span><span class="p">,</span><span class="x"> </span><span class="n">username</span><span class="x"> </span><span class="kt">string</span><span class="p">,</span><span class="x"> </span><span class="n">password</span><span class="x"> </span><span class="kt">string</span><span class="p">)</span><span class="x"> </span><span class="p">(</span><span class="n">Rpc</span><span class="p">,</span><span class="x"> </span><span class="kt">error</span><span class="p">)</span><span class="x"> </span><span class="p">{</span><span class="x">
+	</span><span class="n">RPCclient</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">xmlrpc</span><span class="o">.</span><span class="n">NewClient</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span><span class="x"> </span><span class="no">nil</span><span class="p">)</span><span class="x">
+	</span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
+		</span><span class="n">log</span><span class="o">.</span><span class="n">Fatal</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="x">
+	</span><span class="p">}</span><span class="x">
+	</span><span class="n">RpcObj</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">Rpc</span><span class="p">{</span><span class="n">RPCClient</span><span class="o">:</span><span class="x"> </span><span class="o">*</span><span class="n">RPCclient</span><span class="p">,</span><span class="x"> </span><span class="n">Key</span><span class="o">:</span><span class="x"> </span><span class="n">username</span><span class="x"> </span><span class="o">+</span><span class="x"> </span><span class="s">":"</span><span class="x"> </span><span class="o">+</span><span class="x"> </span><span class="n">password</span><span class="p">}</span><span class="x">
+	</span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">RpcObj</span><span class="o">.</span><span class="n">Key</span><span class="p">)</span><span class="x">
+	</span><span class="k">return</span><span class="x"> </span><span class="n">RpcObj</span><span class="p">,</span><span class="x"> </span><span class="no">nil</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre>
+</div>
+
+<h3 id="compute--template-api">Compute &amp; Template API</h3>
+
+<p>The compute API is used to create and delete the Virtual Machines. With the given template name and an rpc client created with the correct credentials, this will instantiate a VM or delete it.</p>
+
+<p>This uses <code class="highlighter-rouge">one.template.instantiate</code> and <code class="highlighter-rouge">one.vm.action</code> xml-rpc methods</p>
+
+<p>Template API currently has <code class="highlighter-rouge">GetTemplate()</code> , <code class="highlighter-rouge">GetTemplateByName()</code> and <code class="highlighter-rouge">UpdateTemplate()</code> functions to retrieve templates and update them if necessary.</p>
+
+<div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="p">(</span><span class="n">t</span><span class="x"> </span><span class="o">*</span><span class="n">TemplateReqs</span><span class="p">)</span><span class="x"> </span><span class="n">GetTemplateByName</span><span class="p">()</span><span class="x"> </span><span class="p">([]</span><span class="o">*</span><span class="n">UserTemplate</span><span class="p">,</span><span class="x"> </span><span class="kt">error</span><span class="p">)</span><span class="x"> </span><span class="p">{</span><span class="x">
+	</span><span class="n">args</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="p">[]</span><span class="k">interface</span><span class="p">{}{</span><span class="n">t</span><span class="o">.</span><span class="n">Client</span><span class="o">.</span><span class="n">Key</span><span class="p">,</span><span class="x"> </span><span class="o">-</span><span class="m">2</span><span class="p">,</span><span class="x"> </span><span class="o">-</span><span class="m">1</span><span class="p">,</span><span class="x"> </span><span class="o">-</span><span class="m">1</span><span class="p">}</span><span class="x">
+	</span><span class="n">templatePool</span><span class="p">,</span><span class="x"> </span><span class="n">_</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">t</span><span class="o">.</span><span class="n">Client</span><span class="o">.</span><span class="n">Call</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">Client</span><span class="o">.</span><span class="n">RPCClient</span><span class="p">,</span><span class="x"> </span><span class="n">TEMPLATEPOOL_INFO</span><span class="p">,</span><span class="x"> </span><span class="n">args</span><span class="p">)</span><span class="x">
+
+	</span><span class="n">xmlStrt</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">UserTemplates</span><span class="p">{}</span><span class="x">
+	</span><span class="n">assert</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">templatePool</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="o">.</span><span class="p">(</span><span class="kt">string</span><span class="p">)</span><span class="x">
+	</span><span class="n">_</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="n">xml</span><span class="o">.</span><span class="n">Unmarshal</span><span class="p">([]</span><span class="kt">byte</span><span class="p">(</span><span class="n">assert</span><span class="p">),</span><span class="x"> </span><span class="o">&amp;</span><span class="n">xmlStrt</span><span class="p">)</span><span class="x">
+
+	</span><span class="k">var</span><span class="x"> </span><span class="n">matchedTemplate</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="nb">make</span><span class="p">([]</span><span class="o">*</span><span class="n">UserTemplate</span><span class="p">,</span><span class="x"> </span><span class="nb">len</span><span class="p">(</span><span class="n">xmlStrt</span><span class="o">.</span><span class="n">UserTemplate</span><span class="p">))</span><span class="x">
+
+	</span><span class="k">for</span><span class="x"> </span><span class="n">_</span><span class="p">,</span><span class="x"> </span><span class="n">v</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="k">range</span><span class="x"> </span><span class="n">xmlStrt</span><span class="o">.</span><span class="n">UserTemplate</span><span class="x"> </span><span class="p">{</span><span class="x">
+		</span><span class="k">if</span><span class="x"> </span><span class="n">v</span><span class="o">.</span><span class="n">Name</span><span class="x"> </span><span class="o">==</span><span class="x"> </span><span class="n">t</span><span class="o">.</span><span class="n">TemplateName</span><span class="x"> </span><span class="p">{</span><span class="x">
+			</span><span class="n">matchedTemplate</span><span class="p">[</span><span class="m">0</span><span class="p">]</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="n">v</span><span class="x">
+		</span><span class="p">}</span><span class="x">
+	</span><span class="p">}</span><span class="x">
+	</span><span class="k">return</span><span class="x"> </span><span class="n">matchedTemplate</span><span class="p">,</span><span class="x"> </span><span class="no">nil</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre>
+</div>
+
+<p>The above code will make an RPC call to get the template with TemplateReqs struct object containing the rpc client and template name.
+An RPC call with the correct args returns <code class="highlighter-rouge">templatePool</code> which contains all templates for that particular host, it is then parsed using go’s xml ,matched using the give name and returned</p>
+
+<p>##Using the API</p>
+
+<p>Using the api is dead simple, creating a VM will hardly take few lines of code.
+Remember, the RPC endpoint for One is <code class="highlighter-rouge">http://&lt;ip&gt;:2633/RPC2</code></p>
+
+<p><strong>Note</strong>: if you want to find your username:pass, run this command as super user</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$cat /var/lib/one/.one/one_auth
+</code></pre>
+</div>
+
+<div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="x">
+</span><span class="c">//create a client</span><span class="x">
+</span><span class="n">client</span><span class="p">,</span><span class="x"> </span><span class="n">_</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">api</span><span class="o">.</span><span class="n">NewRPCClient</span><span class="p">(</span><span class="s">"http://localhost:2633/RPC2"</span><span class="p">,</span><span class="x"> </span><span class="s">"oneadmin"</span><span class="p">,</span><span class="x"> </span><span class="s">"password"</span><span class="p">)</span><span class="x">
+</span><span class="c">//Give your vm specs, mainly templatename and client</span><span class="x">
+</span><span class="n">vmObj</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">VirtualMachine</span><span class="p">{</span><span class="n">Name</span><span class="o">:</span><span class="x"> </span><span class="s">"yeshapp"</span><span class="p">,</span><span class="x"> </span><span class="n">TemplateName</span><span class="o">:</span><span class="x"> </span><span class="s">"fullfledged"</span><span class="p">,</span><span class="x"> </span><span class="n">Cpu</span><span class="o">:</span><span class="x"> </span><span class="s">"1"</span><span class="p">,</span><span class="x"> </span><span class="n">VCpu</span><span class="o">:</span><span class="x"> </span><span class="s">"1"</span><span class="p">,</span><span class="x"> </span><span class="n">Memory</span><span class="o">:</span><span class="x"> </span><span class="s">"4500"</span><span class="p">,</span><span class="x"> </span><span class="n">Client</span><span class="o">:</span><span class="x"> </span><span class="o">&amp;</span><span class="n">client</span><span class="p">}</span><span class="x">
+</span><span class="c">//call the create api</span><span class="x">
+</span><span class="n">_</span><span class="p">,</span><span class="x"> </span><span class="kt">error</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">vmObj</span><span class="o">.</span><span class="n">Create</span><span class="p">()</span><span class="x">
+</span></code></pre>
+</div>
+
+<p>Thats it! Open up your sunstone UI to see the VM firing up. The API is still young and contributions are welcome. Thats it for now.</p>
+
+
+  <div class="post__author js-fade-in">
+    
+    
+    on Aug 30, 2015</p>
+
+    
+
+
+  </div>
+  <a class="btn text" href="/blog">Back to blog</a>
+
+  <br style="clear:both;">
+<div class="disqus-container" style="padding-top:1em;">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'morpheyesh'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+</div>
+
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {inlineMath: [['$','$']]}
+  });
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+    </div>
+
+    <div class="footer">
+      <div class="wrapper">
+        <p>Copyright &copy; 2014-2017<a href="/">Yeshwanth Kumar</a></p>
+        <ul class="navigation">
+          <!-- <li><a href="/projects">Projects</a></li>
+          <li><a href="/events">Events</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="/about">About</a></li> -->
+        </ul>
+      </div>
+    </div>
+
+  <!-- Salvattore.js for the masonry layout -->
+  <script type="text/javascript" src="/js/salvattore.min.js"></script>
+  <!-- Salvattore.js for the masonry layout -->
+
+
+
+<!-- <script src="//my.hellobar.com/e9c15cdf31ce7e42008a15bf75ea9d003af5f722.js" type="text/javascript" charset="utf-8" async="async"></script> -->
+
+
+  </body>
+</html>

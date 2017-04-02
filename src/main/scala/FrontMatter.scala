@@ -1,4 +1,4 @@
-package org.typelevel.blog
+package yeshwanthk.blog
 
 import coursier._
 import coursier.util.Parse

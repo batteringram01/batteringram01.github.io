@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Yeshwanth Kumar | Docker development - Remote shell access to your docker containers using docker API</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+
+
+    <link rel="mask-icon" href="/img/favicon-safari.svg" color="#F51C2B">
+    <link href="/img/yfavicon.png" rel="icon" type="image/x-icon">
+    <link rel="alternate" href="/blog/feed.rss" title="RSS feed" type="application/rss+xml">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,400italic,700' rel='stylesheet' type='text/css'>
+
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/app.js"></script>
+  </head>
+  <body class="no-js ">
+    <div class="header">
+      <div class="wrapper">
+        <a href="/">
+          <div class="header__logo">
+            Yeshwanth Kumar
+          </div>
+        </a>
+        <a href="#" class="header__menu">
+          Menu
+        </a>
+        <ul class="navigation" role="navigation">
+        <!--  <li >
+            <a href="/projects">Projects</a>
+          </li>
+          <li >
+            <a href="/events">Events</a>
+          </li>
+
+          <li  class="active" >
+            <a href="/blog">Blog</a>
+          </li>
+          <li >
+            <a href="/about.html">About</a> -->
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="wrapper">
+      <div class="content js-fade-in">
+  <h2>Docker development - Remote shell access to your docker containers using docker API</h2>
+
+  <p>Localhost doesn’t really feel home these days, especially with lots of <em>things</em> thats going around the developer automation space, koding became an open source company, GitLabCI looks promising, there are gazillion open source orchestration tools,  I’m seriously contemplating moving my entire development workspace to the cloud(give your thoughts in comments). Besides, baremetal servers are cheap too. Anyways, I will write a detailed post on how that went, for now we’ll talk about building a tool or extending an existing docker tool to support remove shell access using the docker API.</p>
+
+<!--more-->
+
+<h2 id="why">Why??</h2>
+
+<p>Many organizations use docker, many even use it in production, most of them use it for development and testing, all have their own orchestration tool which deals with provisioning docker containers on the cloud. You might use swarm or kubernetes for docker clustering to manage nodes and might use corresponding CLI that talks to your remote docker platform for it to do the needful.</p>
+
+<p>Many times you would want to gain shell access to the remote containers for a lot of reasons, like import/export of database dump from service containers, setting up envs, etc.</p>
+
+<p>But it just doesn’t end there, this is really helpful when you have all your development happening remotely, Imagine this, you do not have to install all the language runtimes, you do not have to go through the pain of maintaining versions and working with differnet version managers, just keep them as images and all you need is a docker orchestration platform running on your remote server and a cli to perform all docker operations, you are good to go.</p>
+
+<p>Infact you can even have droneCI set on your docker instance and a git push does the magic, docker containers are ephemeral in nature, we are leveraging it to the fullest.</p>
+
+<p>We will look into building a golang server and client with which can be the base for you to extend and build you own tool</p>
+
+<p><strong><em>Note: 99% of the operation are covered by docker API itself</em></strong></p>
+
+<p>##Approach</p>
+
+<p>Let us call this project <code class="highlighter-rouge">whale</code>,  the server as <code class="highlighter-rouge">whale-server</code>(pardon my lack of ability to come up with a better name) and obviously the cli as <code class="highlighter-rouge">whale-cli</code>. We will be using websocket and establish a connection from the terminal to the container and that is how we get the shell access.
+On the server side, we have a websocket handler, pass the websocket object as stdin, stdout and stderr to docker’s <code class="highlighter-rouge">Exec</code>. On the client side, we do a simple <code class="highlighter-rouge">io.copy</code>. Lets get started..</p>
+
+<div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="x">
+</span><span class="n">createExecOpts</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">docker</span><span class="o">.</span><span class="n">CreateExecOptions</span><span class="p">{</span><span class="x">
+  </span><span class="n">AttachStdin</span><span class="o">:</span><span class="x">  </span><span class="no">true</span><span class="p">,</span><span class="x">
+  </span><span class="n">AttachStdout</span><span class="o">:</span><span class="x"> </span><span class="no">true</span><span class="p">,</span><span class="x">
+  </span><span class="n">AttachStderr</span><span class="o">:</span><span class="x"> </span><span class="no">true</span><span class="p">,</span><span class="x">
+  </span><span class="n">Cmd</span><span class="o">:</span><span class="x">          </span><span class="n">commands</span><span class="p">,</span><span class="x">
+  </span><span class="n">Container</span><span class="o">:</span><span class="x">    </span><span class="n">ContainerID</span><span class="p">,</span><span class="x">
+  </span><span class="n">Tty</span><span class="o">:</span><span class="x">          </span><span class="no">true</span><span class="p">,</span><span class="x">
+</span><span class="p">}</span><span class="x">
+
+</span></code></pre>
+</div>
+<p>Above createExecOption object is created with attach stdin, stdout and stderr set to true. <code class="highlighter-rouge">commands</code> are the commands you want to execute during the <code class="highlighter-rouge">exec</code> call</p>
+
+<p>NOTE: You can ssh into your container just fine with <hostIP>:<containerPort> provided the container port is exposed. This is just an enchancement you could make to your docker tool which has the right auth mechanism in place. Also it is not a good practice to expose port especially if you are using service containers to test.</containerPort></hostIP></p>
+
+<p>##Setting up the websocket handler:</p>
+
+<p>Google on how to setup a basic golang server. Let us include the websocker handler, use  <code class="highlighter-rouge">"golang.org/x/net/websocket"</code>, makes it a lot easier to work with the standard library.</p>
+
+<div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="x">
+</span><span class="k">func</span><span class="x"> </span><span class="n">main</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="c">//define other handlers</span><span class="x">
+	</span><span class="n">http</span><span class="o">.</span><span class="n">Handle</span><span class="p">(</span><span class="s">"/1.0/shell"</span><span class="p">,</span><span class="x"> </span><span class="n">websocket</span><span class="o">.</span><span class="n">Handler</span><span class="p">(</span><span class="n">shellHandler</span><span class="p">))</span><span class="x">
+	</span><span class="n">http</span><span class="o">.</span><span class="n">ListenAndServe</span><span class="p">(</span><span class="n">listen</span><span class="p">,</span><span class="x"> </span><span class="no">nil</span><span class="p">)</span><span class="x"> </span><span class="c">//listen is a var with address to bind. ex: 0.0.0.0:8080</span><span class="x">
+</span><span class="p">}</span><span class="x">
+
+
+</span></code></pre>
+</div>
+
+<p>Now that you have the routes set, we need to define the shellHandler.</p>
+
+<p>##Interacting with the docker API - Shell access</p>
+
+<p>fsouza’s dockerClient is probably the best(and only) go docker client that is out there in the wild. Using the client we need to first create an instance, then create a new Exec and start it.</p>
+
+<p>###Create a NewExec</p>
+
+<p>Once you create a new docker client, make sure to point your docker engine or swarm endpoint. Create a new exec with the previously initialized <code class="highlighter-rouge">createExecOption</code>, and then start pass the <code class="highlighter-rouge">startExecOptions</code> with stdin, stdout and stderr.</p>
+
+<div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="n">client</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">docker</span><span class="o">.</span><span class="n">NewClient</span><span class="p">(</span><span class="n">dockerHost</span><span class="p">)</span><span class="x">
+</span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="k">return</span><span class="x"> </span><span class="n">err</span><span class="x">
+</span><span class="p">}</span><span class="x">
+
+
+</span><span class="n">exec</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">client</span><span class="o">.</span><span class="n">CreateExec</span><span class="p">(</span><span class="n">createExecOption</span><span class="p">)</span><span class="x">
+</span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="k">return</span><span class="x"> </span><span class="n">err</span><span class="x">
+</span><span class="p">}</span><span class="x">
+
+</span><span class="n">startExecOptions</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">docker</span><span class="o">.</span><span class="n">StartExecOptions</span><span class="p">{</span><span class="x">
+  </span><span class="n">InputStream</span><span class="o">:</span><span class="x">  </span><span class="n">stdin</span><span class="p">,</span><span class="x">
+  </span><span class="n">OutputStream</span><span class="o">:</span><span class="x"> </span><span class="n">stdout</span><span class="p">,</span><span class="x">
+  </span><span class="n">ErrorStream</span><span class="o">:</span><span class="x">  </span><span class="n">stderr</span><span class="p">,</span><span class="x">
+  </span><span class="n">Tty</span><span class="o">:</span><span class="x">          </span><span class="no">true</span><span class="p">,</span><span class="x">
+  </span><span class="n">RawTerminal</span><span class="o">:</span><span class="x">  </span><span class="no">true</span><span class="p">,</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="nb">make</span><span class="p">(</span><span class="k">chan</span><span class="x"> </span><span class="kt">error</span><span class="p">,</span><span class="x"> </span><span class="m">1</span><span class="p">)</span><span class="x">
+</span><span class="k">go</span><span class="x"> </span><span class="k">func</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="n">errs</span><span class="x"> </span><span class="o">&lt;-</span><span class="x"> </span><span class="n">client</span><span class="o">.</span><span class="n">StartExec</span><span class="p">(</span><span class="n">exec</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span><span class="x"> </span><span class="n">startExecOptions</span><span class="p">)</span><span class="x">
+</span><span class="p">}()</span><span class="x">
+</span><span class="n">execInfo</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">client</span><span class="o">.</span><span class="n">InspectExec</span><span class="p">(</span><span class="n">exec</span><span class="o">.</span><span class="n">ID</span><span class="p">)</span><span class="x">
+</span><span class="k">for</span><span class="x"> </span><span class="o">!</span><span class="n">execInfo</span><span class="o">.</span><span class="n">Running</span><span class="x"> </span><span class="o">&amp;&amp;</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">==</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="k">select</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="k">case</span><span class="x"> </span><span class="n">startErr</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="o">&lt;-</span><span class="n">err</span><span class="o">:</span><span class="x">
+    </span><span class="k">return</span><span class="x"> </span><span class="n">startErr</span><span class="x">
+  </span><span class="k">default</span><span class="o">:</span><span class="x">
+    </span><span class="n">execInfo</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="n">client</span><span class="o">.</span><span class="n">InspectExec</span><span class="p">(</span><span class="n">exec</span><span class="o">.</span><span class="n">ID</span><span class="p">)</span><span class="x">
+  </span><span class="p">}</span><span class="x">
+</span><span class="p">}</span><span class="x">
+
+</span></code></pre>
+</div>
+
+<p>We wrap the <code class="highlighter-rouge">StartExec</code> in a goroutine along with it we create a buffered channel and using the <code class="highlighter-rouge">select</code> statement we listen on the channel for errors, keeping the goroutine alive. Good, now that we have the server side all set, let us look into the client side.</p>
+
+<p>##Client side - Using the I/O package</p>
+
+<p>It is no surprise that we’d be using the Go’s IO package, which is one of the most fundamental packages of Go’s standard library. Go plays well with bytes in any form - streams, invidivual bytes etc. The two basic operations when working with bytes are reading &amp; writing.</p>
+
+<p>###Reader interface</p>
+
+<div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="k">type</span><span class="x"> </span><span class="n">Reader</span><span class="x"> </span><span class="k">interface</span><span class="x"> </span><span class="p">{</span><span class="x">
+        </span><span class="n">Read</span><span class="p">(</span><span class="n">p</span><span class="x"> </span><span class="p">[]</span><span class="kt">byte</span><span class="p">)</span><span class="x"> </span><span class="p">(</span><span class="n">n</span><span class="x"> </span><span class="kt">int</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="kt">error</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre>
+</div>
+<p>The reader interface wraps the basic read method, read reads up bytes and returns an n bytes read and an EOF if it fails. <code class="highlighter-rouge">MultiReader</code> and <code class="highlighter-rouge">TeeReader</code> are powerful in dealing with multiple reads.</p>
+
+<p>###Writer interface</p>
+
+<div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="k">type</span><span class="x"> </span><span class="n">Writer</span><span class="x"> </span><span class="k">interface</span><span class="x"> </span><span class="p">{</span><span class="x">
+        </span><span class="n">Write</span><span class="p">(</span><span class="n">p</span><span class="x"> </span><span class="p">[]</span><span class="kt">byte</span><span class="p">)</span><span class="x"> </span><span class="p">(</span><span class="n">n</span><span class="x"> </span><span class="kt">int</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="kt">error</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre>
+</div>
+
+<p>This is similar to the Reader interface, writer writes bytes. <code class="highlighter-rouge">Multiwriter</code> can be used when you need multiple sinks. You can find more information on the go documentation. Coming to think of it, I will write a another post explaining the various caveats of reading and writing byte streams in golang, it is a huge and interesting topic. For now, let us focus on finishing up our CLI.</p>
+
+<p>###Copy ‘em all</p>
+
+<p>Create a websocket connection, cfg returns a ‘websocker.NewConfig’ object.</p>
+
+<div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="n">conn</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">websocket</span><span class="o">.</span><span class="n">DialConfig</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span><span class="x">
+</span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="k">return</span><span class="x"> </span><span class="n">err</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span><span class="k">defer</span><span class="x"> </span><span class="n">conn</span><span class="o">.</span><span class="n">Close</span><span class="p">()</span><span class="x">
+
+</span></code></pre>
+</div>
+
+<p>Go’s defer is so convenient and one of my favs. We use <code class="highlighter-rouge">io.Copy</code> to copy from src and dst. Let us see how the basic <code class="highlighter-rouge">io.Copy</code> works,</p>
+
+<div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="k">func</span><span class="x">  </span><span class="n">main</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="n">r</span><span class="x"> </span><span class="o">:=</span><span class="x">  </span><span class="n">strings</span><span class="o">.</span><span class="n">NewReader</span><span class="p">(</span><span class="s">"booyah"</span><span class="p">)</span><span class="x"> </span><span class="c">//create a new reader</span><span class="x">
+  </span><span class="k">if</span><span class="x"> </span><span class="n">_</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">io</span><span class="o">.</span><span class="n">Copy</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">Stdout</span><span class="p">,</span><span class="x"> </span><span class="n">r</span><span class="p">);</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x"> </span><span class="c">//see?</span><span class="x">
+               </span><span class="n">log</span><span class="o">.</span><span class="n">Fatal</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="x">
+       </span><span class="p">}</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre>
+</div>
+
+<p>io.Copy takes a Writer and a Reader, the above example is of no big deal, you can find it in the documentation, but how exactly are we going to keep a persistant connection and perform commands inside my docker over the network?
+Righty, I am going to give an admittedly stupid example, let us modify the above code a bit..</p>
+
+<div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="n">main</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="n">q</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="nb">make</span><span class="p">(</span><span class="k">chan</span><span class="x"> </span><span class="kt">bool</span><span class="p">)</span><span class="x"> </span><span class="c">//create a go routine</span><span class="x">
+  </span><span class="k">go</span><span class="x"> </span><span class="k">func</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="k">defer</span><span class="x"> </span><span class="nb">close</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="x"> </span><span class="c">//beaut!</span><span class="x">
+    </span><span class="k">if</span><span class="x"> </span><span class="n">_</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">io</span><span class="o">.</span><span class="n">Copy</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">Stdout</span><span class="p">,</span><span class="x"> </span><span class="n">os</span><span class="o">.</span><span class="n">Stdin</span><span class="p">);</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
+      </span><span class="n">log</span><span class="o">.</span><span class="n">Fatal</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="x">
+    </span><span class="p">}</span><span class="x">
+  </span><span class="p">}()</span><span class="x">
+</span><span class="o">&lt;-</span><span class="n">q</span><span class="x">  </span><span class="c">//wait for the goroutine to die</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre>
+</div>
+
+<p>Now, if you run it in terminal you’d see this..</p>
+
+<p><strong>NOTE: Asciicinema uses io to record your video, it doesn’t record the video like say, kazam</strong></p>
+
+<p>Now, coming to your docker implementation, in order to interact with the container, pass the websocket object as Writer and Reader like this.</p>
+
+<div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="x">
+</span><span class="k">go</span><span class="x"> </span><span class="n">io</span><span class="o">.</span><span class="n">Copy</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="x"> </span><span class="n">os</span><span class="o">.</span><span class="n">Stdin</span><span class="p">)</span><span class="x">
+</span><span class="k">go</span><span class="x"> </span><span class="k">func</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="k">defer</span><span class="x"> </span><span class="nb">close</span><span class="p">(</span><span class="n">done</span><span class="p">)</span><span class="x">
+  </span><span class="n">_</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">io</span><span class="o">.</span><span class="n">Copy</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">Stdout</span><span class="p">,</span><span class="x"> </span><span class="n">conn</span><span class="p">)</span><span class="x">
+  </span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="o">&amp;&amp;</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="n">io</span><span class="o">.</span><span class="n">EOF</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">errs</span><span class="x"> </span><span class="o">&lt;-</span><span class="x"> </span><span class="n">err</span><span class="x">
+  </span><span class="p">}</span><span class="x">
+</span><span class="p">}()</span><span class="x">
+</span><span class="o">&lt;-</span><span class="n">done</span><span class="x">
+</span><span class="k">return</span><span class="x"> </span><span class="o">&lt;-</span><span class="n">errs</span><span class="x">
+
+</span></code></pre>
+</div>
+
+<p>##End
+I guess that is it, I will try to cook up a simple server and client and share the code on github when I find time. I’m currently building tools that would help me move my dev environment completely to the cloud. I’m planning on Chrome Book + GalliumOS + baremetal server + docker tools(orchestrators) + ofcourse, Docker! Hope the post was helpful.</p>
+
+<p>until next time.</p>
+
+
+  <div class="post__author js-fade-in">
+    
+    
+    on Sep 06, 2016</p>
+
+    
+
+
+  </div>
+  <a class="btn text" href="/blog">Back to blog</a>
+
+  <br style="clear:both;">
+<div class="disqus-container" style="padding-top:1em;">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'morpheyesh'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+</div>
+
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {inlineMath: [['$','$']]}
+  });
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+    </div>
+
+    <div class="footer">
+      <div class="wrapper">
+        <p>Copyright &copy; 2014-2017<a href="/">Yeshwanth Kumar</a></p>
+        <ul class="navigation">
+          <!-- <li><a href="/projects">Projects</a></li>
+          <li><a href="/events">Events</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="/about">About</a></li> -->
+        </ul>
+      </div>
+    </div>
+
+  <!-- Salvattore.js for the masonry layout -->
+  <script type="text/javascript" src="/js/salvattore.min.js"></script>
+  <!-- Salvattore.js for the masonry layout -->
+
+
+
+<!-- <script src="//my.hellobar.com/e9c15cdf31ce7e42008a15bf75ea9d003af5f722.js" type="text/javascript" charset="utf-8" async="async"></script> -->
+
+
+  </body>
+</html>

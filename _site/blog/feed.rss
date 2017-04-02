@@ -6,15 +6,127 @@
     <link></link>
     
       <item>
-        <title>Deriving Type Class Instances</title>
+        <title>Continuous Integration - Setting webhooks and deploy keys on gitlab</title>
                 
         
-          <description>&lt;p&gt;asdplaskdojasiodjasidjiashdiasuh&lt;/p&gt;
+          <description>&lt;p&gt;You have your own CI tool in place? Or planning to build some kinda of a internal build system?  Ever wondered how CI tools like travis, drone and jenkins work when you do a git push? This post will talk about setting up webhooks and deploy keys on gitlab.&lt;/p&gt;
+
 </description>
         
-        <pubDate>Fri, 30 Sep 2016 00:00:00 +0100</pubDate>
-        <link>/blog/2016/09/30/test.html</link>
-        <guid isPermaLink="true">/blog/2016/09/30/test.html</guid>
+        <pubDate>Tue, 13 Sep 2016 00:00:00 +0100</pubDate>
+        <link>/blog/2016/09/13/continuous-integration-setting-up-deploy-keys-on-gitlab.html</link>
+        <guid isPermaLink="true">/blog/2016/09/13/continuous-integration-setting-up-deploy-keys-on-gitlab.html</guid>
+      </item>
+    
+      <item>
+        <title>Docker development - Remote shell access to your docker containers using docker API</title>
+                
+        
+          <description>&lt;p&gt;Localhost doesn’t really feel home these days, especially with lots of &lt;em&gt;things&lt;/em&gt; thats going around the developer automation space, koding became an open source company, GitLabCI looks promising, there are gazillion open source orchestration tools,  I’m seriously contemplating moving my entire development workspace to the cloud(give your thoughts in comments). Besides, baremetal servers are cheap too. Anyways, I will write a detailed post on how that went, for now we’ll talk about building a tool or extending an existing docker tool to support remove shell access using the docker API.&lt;/p&gt;
+
+</description>
+        
+        <pubDate>Tue, 06 Sep 2016 00:00:00 +0100</pubDate>
+        <link>/blog/2016/09/06/remote-shell-access-to-your-docker-containers-using-docker-api.html</link>
+        <guid isPermaLink="true">/blog/2016/09/06/remote-shell-access-to-your-docker-containers-using-docker-api.html</guid>
+      </item>
+    
+      <item>
+        <title>Building webservices with finch</title>
+                
+        
+          <description>&lt;p&gt;I chose scala and akka as the quintessential stack to build the metrics processing engine which would deal with things running concurrently. Initially, the engine was written in golang, goroutines doing all the heavy lifting, I decided to write it in scala, and in a pure functional approach. It is called concorde(yes! I always dreamt of flying in one) and it leverages the akka’s actor model to deal with concurrency and uses finch for building other web services.&lt;/p&gt;
+
+</description>
+        
+        <pubDate>Sun, 13 Mar 2016 00:00:00 +0000</pubDate>
+        <link>/blog/2016/03/13/building-web-services-with-finch.html</link>
+        <guid isPermaLink="true">/blog/2016/03/13/building-web-services-with-finch.html</guid>
+      </item>
+    
+      <item>
+        <title>Deploying spark jobs with Spark Job Server</title>
+                
+        
+          <description>&lt;p&gt;In this blog post I am going to quickly talk about this kickass project that was opensourced by the folks at &lt;a href=&quot;&amp;quot;https://ooyala.com&amp;quot;&quot;&gt;Ooyala&lt;/a&gt; called &lt;a href=&quot;&amp;quot;htps://github.com/spark-jobserver/spark-jobserver&amp;quot;&quot;&gt;spark-jobserver&lt;/a&gt;, SJS in short is used to create, submit, run, monitor and delete spark data files, jobs, job contexts and JARs, Tracking and serializing jobs progress, status and results becomes super simple. This provides a RESTful layer to interact with any spark cluster and it also supports YARN and MESOS, so this in my opinion is almost production ready.&lt;br /&gt;
+We will look at how to set up a spark-jobserver and submit a job and execute it locally. I am writing one more post on performing sql queries for structured data processing using SQLContext, DataFrames API and such.
+&lt;!-- more --&gt;&lt;/p&gt;
+
+</description>
+        
+        <pubDate>Sun, 10 Jan 2016 00:00:00 +0000</pubDate>
+        <link>/blog/2016/01/10/run-spark-jobs-easily-with-spark-jobserver.html</link>
+        <guid isPermaLink="true">/blog/2016/01/10/run-spark-jobs-easily-with-spark-jobserver.html</guid>
+      </item>
+    
+      <item>
+        <title>Lets get functional using scalaz</title>
+                
+        
+          <description>&lt;p&gt;Last week I gave a talk on building a RESTful API server using play/scalaz(&lt;a href=&quot;http://www.slideshare.net/YeshwanthKumar7/restful-api-using-scalaz-3&quot;&gt;slide&lt;/a&gt;) in functionalConf 2015. It was two days full of programmers talking/sharing about writing code in a paradigm that many dread to even start, especially people from an object oriented background. Whenever I ask people about fp, they all have the idea that you need a Ph.D or similar sort, to write functional code, which is not true at all. I will be(try) writing a series of articles that focuses on helping developers write pure functional code and will make sure to stick to the usecases and how they can be used more than the scary theory behind it.&lt;/p&gt;
+
+</description>
+        
+        <pubDate>Sat, 19 Sep 2015 00:00:00 +0100</pubDate>
+        <link>/blog/2015/09/19/lets-get-functional-using-scalaz.html</link>
+        <guid isPermaLink="true">/blog/2015/09/19/lets-get-functional-using-scalaz.html</guid>
+      </item>
+    
+      <item>
+        <title>OpenNebula API in Go</title>
+                
+        
+          <description>&lt;p&gt;For those who don’t know what &lt;a href=&quot;http://opennebula.org/&quot;&gt;OpenNebula&lt;/a&gt; is, It is a simple, resilient hybrid cloud platform that is very easy to get started. Yes, one(short for OpenNebula) is less complicated and can be set up in few hours. Oh wait, now the most obvious question pops up! so how good is it when compared to OpenStack? Let me try and give a quick answer, OpenStack is a toolkit for building complex IaaS, it has multiple blocks of differnet tools on different layers combined, so with OpenStack you have the ability to tune each block for each need, but in OpenNebula, it is all combined, which makes it a lot easier to get started. I am going to stick to the topic and write about how I wrote an API in golang that talks to OpenNebula to create and control virtual machines. This is the only golang OpenNebula API that is available on github at the time of writing.
+&lt;!--more--&gt;&lt;/p&gt;
+
+</description>
+        
+        <pubDate>Sun, 30 Aug 2015 00:00:00 +0100</pubDate>
+        <link>/blog/2015/08/30/opennebula-api-in-golang.html</link>
+        <guid isPermaLink="true">/blog/2015/08/30/opennebula-api-in-golang.html</guid>
+      </item>
+    
+      <item>
+        <title>Docker clustering with Swarm</title>
+                
+        
+          <description>&lt;h3 id=&quot;quick-intro-to-swarm&quot;&gt;Quick intro to swarm&lt;/h3&gt;
+
+</description>
+        
+        <pubDate>Fri, 03 Jul 2015 00:00:00 +0100</pubDate>
+        <link>/blog/2015/07/03/docker-clustering-with-swarm.html</link>
+        <guid isPermaLink="true">/blog/2015/07/03/docker-clustering-with-swarm.html</guid>
+      </item>
+    
+      <item>
+        <title>RESTful API in GO</title>
+                
+        
+          <description>&lt;p&gt;The web is filled with different API design suggestions/standards with many web services today are moving to API centric architectures, it is important to keep in mind the complexities that can be caused by a poorly designed API.
+Remember an API is almost like an interface used by the developers to work on your service and it needs to be well designed, when I mean well designed, it needs to be highly
+pragmatic and easy for the developers to understand and quickly get started with.
+A good API design will give you the ability to also scale drastically without affecting the service. &lt;!-- more --&gt;
+If you have worked with an API before that is poorly designed, then the code you write which consumes the API ends up being messy and bad.&lt;/p&gt;
+
+</description>
+        
+        <pubDate>Tue, 14 Apr 2015 00:00:00 +0100</pubDate>
+        <link>/blog/2015/04/14/writing-a-restful-api-in-go.html</link>
+        <guid isPermaLink="true">/blog/2015/04/14/writing-a-restful-api-in-go.html</guid>
+      </item>
+    
+      <item>
+        <title>Play - the reactive web framework</title>
+                
+        
+          <description>&lt;p&gt;We saw the world moving from writing web applications from java, to perl, to php, then the rails/django and now its time for something more reactive, Play Framework. Typesafe backed, play2 is written in scala and it is the only scala high-productivity web framework that I have loved working with. Getting started with play is a breeze .&lt;/p&gt;
+
+</description>
+        
+        <pubDate>Wed, 25 Mar 2015 00:00:00 +0000</pubDate>
+        <link>/blog/2015/03/25/getting-started-with-play.html</link>
+        <guid isPermaLink="true">/blog/2015/03/25/getting-started-with-play.html</guid>
       </item>
     
   </channel>

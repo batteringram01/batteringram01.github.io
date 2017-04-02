@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Yeshwanth Kumar | Deploying spark jobs with Spark Job Server</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+
+
+    <link rel="mask-icon" href="/img/favicon-safari.svg" color="#F51C2B">
+    <link href="/img/yfavicon.png" rel="icon" type="image/x-icon">
+    <link rel="alternate" href="/blog/feed.rss" title="RSS feed" type="application/rss+xml">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,400italic,700' rel='stylesheet' type='text/css'>
+
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/app.js"></script>
+  </head>
+  <body class="no-js ">
+    <div class="header">
+      <div class="wrapper">
+        <a href="/">
+          <div class="header__logo">
+            Yeshwanth Kumar
+          </div>
+        </a>
+        <a href="#" class="header__menu">
+          Menu
+        </a>
+        <ul class="navigation" role="navigation">
+        <!--  <li >
+            <a href="/projects">Projects</a>
+          </li>
+          <li >
+            <a href="/events">Events</a>
+          </li>
+
+          <li  class="active" >
+            <a href="/blog">Blog</a>
+          </li>
+          <li >
+            <a href="/about.html">About</a> -->
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="wrapper">
+      <div class="content js-fade-in">
+  <h2>Deploying spark jobs with Spark Job Server</h2>
+
+  <p>In this blog post I am going to quickly talk about this kickass project that was opensourced by the folks at <a href="&quot;https://ooyala.com&quot;">Ooyala</a> called <a href="&quot;htps://github.com/spark-jobserver/spark-jobserver&quot;">spark-jobserver</a>, SJS in short is used to create, submit, run, monitor and delete spark data files, jobs, job contexts and JARs, Tracking and serializing jobs progress, status and results becomes super simple. This provides a RESTful layer to interact with any spark cluster and it also supports YARN and MESOS, so this in my opinion is almost production ready.<br />
+We will look at how to set up a spark-jobserver and submit a job and execute it locally. I am writing one more post on performing sql queries for structured data processing using SQLContext, DataFrames API and such.
+<!-- more --></p>
+
+<p><strong><em>NOTE: I am going to run spark-jobserver in dev mode and if you want to deploy in production or so, use the scripts given in the spark-jobserver example repo on github</em></strong></p>
+
+<h3 id="running-spark-jobserver-locally">Running spark-jobserver locally</h3>
+
+<p>Clone the project and cd into spark-jobserver</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>export VER=`sbt version | tail -1 | cut -f2`
+</code></pre>
+</div>
+
+<p>Then, run <code class="highlighter-rouge">sbt</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&gt;reStart
+</code></pre>
+</div>
+
+<p>You can then see your spark-jobserver fired-up and running. Go to localhost:8090 for the UI</p>
+
+<h3 id="deploying-a-jar-to-run-a-spark-job">Deploying a JAR to run a spark job</h3>
+
+<p>In order to run a spark job, the JAR needs to be built and submitted to the <code class="highlighter-rouge">/jars</code> endpoint
+To start with, we can just run the wordcount example..you will find it (here)[https://github.com/spark-jobserver/spark-jobserver/blob/master/job-server-tests/src/spark.jobserver/WordCountExample.scala]</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">object</span> <span class="nc">WordCountExample</span> <span class="k">extends</span> <span class="nc">SparkJob</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="n">main</span><span class="o">(</span><span class="n">args</span><span class="k">:</span> <span class="kt">Array</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="n">sc</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">SparkContext</span><span class="o">(</span><span class="s">"local[4]"</span><span class="o">,</span> <span class="s">"WordCountExample"</span><span class="o">)</span>
+    <span class="k">val</span> <span class="n">config</span> <span class="k">=</span> <span class="nc">ConfigFactory</span><span class="o">.</span><span class="n">parseString</span><span class="o">(</span><span class="s">""</span><span class="o">)</span>
+    <span class="k">val</span> <span class="n">results</span> <span class="k">=</span> <span class="n">runJob</span><span class="o">(</span><span class="n">sc</span><span class="o">,</span> <span class="n">config</span><span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span><span class="s">"Result is "</span> <span class="o">+</span> <span class="n">results</span><span class="o">)</span>
+  <span class="o">}</span>
+
+  <span class="k">override</span> <span class="k">def</span> <span class="n">validate</span><span class="o">(</span><span class="n">sc</span><span class="k">:</span> <span class="kt">SparkContext</span><span class="o">,</span> <span class="n">config</span><span class="k">:</span> <span class="kt">Config</span><span class="o">)</span><span class="k">:</span> <span class="kt">SparkJobValidation</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="nc">Try</span><span class="o">(</span><span class="n">config</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"input.string"</span><span class="o">))</span>
+      <span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">x</span> <span class="k">=&gt;</span> <span class="nc">SparkJobValid</span><span class="o">)</span>
+      <span class="o">.</span><span class="n">getOrElse</span><span class="o">(</span><span class="nc">SparkJobInvalid</span><span class="o">(</span><span class="s">"No input.string config param"</span><span class="o">))</span>
+  <span class="o">}</span>
+
+  <span class="k">override</span> <span class="k">def</span> <span class="n">runJob</span><span class="o">(</span><span class="n">sc</span><span class="k">:</span> <span class="kt">SparkContext</span><span class="o">,</span> <span class="n">config</span><span class="k">:</span> <span class="kt">Config</span><span class="o">)</span><span class="k">:</span> <span class="kt">Any</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="o">(</span><span class="n">config</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"input.string"</span><span class="o">).</span><span class="n">split</span><span class="o">(</span><span class="s">" "</span><span class="o">).</span><span class="n">toSeq</span><span class="o">).</span><span class="n">countByValue</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>Notice the object which implements the SparkJob trait? It should have a validate method and a runJob method which contains the implementation of the job. The validate method just checks whether it is fit to continue and returns an exception.
+You can take a look at the Business Intelligence tool that I am currently building at megam called (meglyticsBI)[https://github.com/megamsys/meglyticsBI-core] which involves the process of connecting to multiple data sources, both structured and unstructured to fetch and perform analytics. It is still under heavy development.</p>
+
+<p>We need to build a jar to push it to spark-jobserver, let us build one.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sbt job-server-tests/package
+</code></pre>
+</div>
+
+<p>You will have a jar built, just push it to SJS
+<code class="highlighter-rouge">
+curl --data-binary @job-server-tests/target/scala-2.10/job-server-tests.jar localhost:8090/jars/myfirstjar
+</code></p>
+
+<p>Now, all we need to do is submit the jar to the SJS to the ‘/jobs’ endpoint with the name of the jar, that is <em>myfirstjar</em> and the classPath.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>curl -d "input.string = bo au hy la" 'localhost:8090/jobs?appName=myfirstjar&amp;classPath=spark.jobserver.WordCountExample'
+</code></pre>
+</div>
+
+<p>It will create its own SparkContext and execute the job and return the result back to you with an JobID.
+You can use the jobID to check the status and result.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>curl localhost:8090/jobs/23232g99-12323hhvvauu-asdf-fdfddd233
+</code></pre>
+</div>
+
+<p>To do a proper deployment, you can find scripts which will help you deploy in ec2 or any other cloud. You need to setup a xyz.conf and xyz.sh and execute the <code class="highlighter-rouge">./server_deploy.sh xyz</code>.</p>
+
+<p>Hope this article was helpful.</p>
+
+
+  <div class="post__author js-fade-in">
+    
+    
+    on Jan 10, 2016</p>
+
+    
+
+
+  </div>
+  <a class="btn text" href="/blog">Back to blog</a>
+
+  <br style="clear:both;">
+<div class="disqus-container" style="padding-top:1em;">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'morpheyesh'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+</div>
+
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {inlineMath: [['$','$']]}
+  });
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+    </div>
+
+    <div class="footer">
+      <div class="wrapper">
+        <p>Copyright &copy; 2014-2017<a href="/">Yeshwanth Kumar</a></p>
+        <ul class="navigation">
+          <!-- <li><a href="/projects">Projects</a></li>
+          <li><a href="/events">Events</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="/about">About</a></li> -->
+        </ul>
+      </div>
+    </div>
+
+  <!-- Salvattore.js for the masonry layout -->
+  <script type="text/javascript" src="/js/salvattore.min.js"></script>
+  <!-- Salvattore.js for the masonry layout -->
+
+
+
+<!-- <script src="//my.hellobar.com/e9c15cdf31ce7e42008a15bf75ea9d003af5f722.js" type="text/javascript" charset="utf-8" async="async"></script> -->
+
+
+  </body>
+</html>

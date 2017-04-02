@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Yeshwanth Kumar | Docker clustering with Swarm</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+
+
+    <link rel="mask-icon" href="/img/favicon-safari.svg" color="#F51C2B">
+    <link href="/img/yfavicon.png" rel="icon" type="image/x-icon">
+    <link rel="alternate" href="/blog/feed.rss" title="RSS feed" type="application/rss+xml">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,400italic,700' rel='stylesheet' type='text/css'>
+
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/app.js"></script>
+  </head>
+  <body class="no-js ">
+    <div class="header">
+      <div class="wrapper">
+        <a href="/">
+          <div class="header__logo">
+            Yeshwanth Kumar
+          </div>
+        </a>
+        <a href="#" class="header__menu">
+          Menu
+        </a>
+        <ul class="navigation" role="navigation">
+        <!--  <li >
+            <a href="/projects">Projects</a>
+          </li>
+          <li >
+            <a href="/events">Events</a>
+          </li>
+
+          <li  class="active" >
+            <a href="/blog">Blog</a>
+          </li>
+          <li >
+            <a href="/about.html">About</a> -->
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="wrapper">
+      <div class="content js-fade-in">
+  <h2>Docker clustering with Swarm</h2>
+
+  <h3 id="quick-intro-to-swarm">Quick intro to swarm</h3>
+
+<p>There is quite a bit happening in the docker world with dockercon 2015 which was a huge success that happened last month, with Microsoft, IBM and other huge companies backing docker and much more.</p>
+
+<!-- more -->
+
+<p>There is one interesting project that the docker folks are working on is its clustering service called <a href="https://github.com/docker/swarm">swarm</a>, still in its beta stage and definitely not production ready, the project is picking up some heat, becoming ready to be integrated with apache mesos.</p>
+
+<p>In this post, we will get started with swarm, one good thing about swarm is that, it serves the standard Docker API, so if there is any tool that already communicates with the standard docker API can use swarm to scale up easily.</p>
+
+<h3 id="setting-up-docker-swarm-cluster">Setting up docker swarm cluster</h3>
+
+<p>The first step is to install docker(like duh!) on all your hosts. If you just want to try out docker swarm , I suggest you spin up couple of instances to try it out.</p>
+
+<p>First things first,</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$sudo apt-get update
+
+$sudo apt-get install linux-image-generic-lts-trusty
+
+$wget -qO- https://get.docker.com/ | sh
+</code></pre>
+</div>
+
+<p><em>NOTE: Check docker site for latest &amp; more stable version of docker</em></p>
+
+<p>We are going to be needing a master and one or more nodes.</p>
+
+<ul>
+  <li><b>Master</b> -  contains the swarm master</li>
+  <li><b>Node(s)</b> - minimal host(s) with docker engine installed</li>
+</ul>
+
+<h3 id="discovery">Discovery</h3>
+
+<p>Swarm uses discovery mechanism to keep track of all the nodes that are connected to the cluster. There are multiple options</p>
+
+<ul>
+  <li>etcd</li>
+  <li>consul</li>
+  <li>zookeeper</li>
+</ul>
+
+<p>but swarm also provides a default token based discovery which we will be using now.
+( I suggest you use etcd or zookeeper for better performance if at all you are using swarm in prod)</p>
+
+<p>Alright, lets get started. Once you have installed docker, run docker in detached modes.</p>
+
+<p>If your docker service is running already then, stop it by</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="nv">$sudo</span> service docker stop
+</code></pre>
+</div>
+
+<p>Start it in detached mode on all your node(s)</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="nv">$docker</span> -H &lt;nodeIP&gt;:2375 -d
+</code></pre>
+</div>
+
+<p>You should see something like this</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>morpheyesh@morpheyesh-laptop:~/blog/morpheyesh.github.io$ sudo docker -H 192.168.1.7:2375 -d
+WARN[0000] /!\ DON'T BIND ON ANY IP ADDRESS WITHOUT setting -tlsverify IF YOU DON'T KNOW WHAT YOU'RE DOING /!\
+INFO[0000] Listening for HTTP on tcp (192.168.1.7:2375)
+INFO[0000] [graphdriver] using prior storage driver "aufs"
+WARN[0000] Running modprobe bridge nf_nat failed with message: , error: exit status 1
+WARN[0000] Your kernel does not support swap memory limit.
+INFO[0000] Loading containers: start.
+..
+INFO[0000] Loading containers: done.
+INFO[0000] Daemon has completed initialization
+INFO[0000] Docker daemon                                 commit=0baf609 execdriver=native-0.2 graphdriver=aufs version=1.7.0
+</code></pre>
+</div>
+
+<p>Let us install the <b>swarm master</b>. Clone it into your Go folder and go install it to build the binary. Swarm can also be run as a container but here we are running it as a daemon and not as a container.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$git clone https://github.com/docker/swarm
+</code></pre>
+</div>
+
+<p><em>Note: Please follow the instructions on the readme of the swarm repo to build &amp; install swarm binary</em></p>
+
+<p>Let us create a swarm token to connect the hosts.</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="nv">$swarm</span> create
+    //copy the token that just got generated
+</code></pre>
+</div>
+<p>Starting the swarm master
+<code class="highlighter-rouge">bash
+$swarm manage -H tcp://&lt;masterIP&gt;:2375 token://&lt;generated token&gt;
+</code></p>
+
+<p>Joining the node(s)</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="nv">$swarm</span> join --addr<span class="o">=</span>Node1IP:2375 token://&lt;generated token&gt;
+    //make sure you join all your node<span class="o">(</span>s<span class="o">)</span>
+</code></pre>
+</div>
+
+<p>You could see the nodeIPs getting printed on swarm master logs.</p>
+
+<p>Now we are connected and the cluster is ready to go. You can make any docker api calls
+to the masterIP as the endpoint to use the cluster.</p>
+
+<p>Simple example to create a container using docker API on swarm cluster</p>
+
+<div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="x">    </span><span class="c">//create client with the endpoint</span><span class="x">
+    </span><span class="n">client</span><span class="p">,</span><span class="n">_</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">docker</span><span class="o">.</span><span class="n">NewClient</span><span class="p">(</span><span class="s">"192.168.1.7:2375"</span><span class="p">)</span><span class="x">
+    </span><span class="n">options</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="n">docker</span><span class="o">.</span><span class="n">CreateContainerOptions</span><span class="p">{</span><span class="n">Name</span><span class="o">:</span><span class="x"> </span><span class="s">"Tame Impala"</span><span class="p">,</span><span class="x"> </span><span class="n">Config</span><span class="o">:</span><span class="x"> </span><span class="o">&amp;</span><span class="n">config</span><span class="p">}</span><span class="x">
+
+    </span><span class="c">//creating a new container</span><span class="x">
+    </span><span class="n">container</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">client</span><span class="o">.</span><span class="n">CreateContainer</span><span class="p">(</span><span class="n">options</span><span class="p">)</span><span class="x">
+</span></code></pre>
+</div>
+
+<p>There are many mature docker clustering solutions present today like kubernetes etc, but eagerly looking forward to know what would happen and how docker is planning to place swarm.</p>
+
+
+  <div class="post__author js-fade-in">
+    
+    
+    on Jul 03, 2015</p>
+
+    
+
+
+  </div>
+  <a class="btn text" href="/blog">Back to blog</a>
+
+  <br style="clear:both;">
+<div class="disqus-container" style="padding-top:1em;">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'morpheyesh'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+</div>
+
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {inlineMath: [['$','$']]}
+  });
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+    </div>
+
+    <div class="footer">
+      <div class="wrapper">
+        <p>Copyright &copy; 2014-2017<a href="/">Yeshwanth Kumar</a></p>
+        <ul class="navigation">
+          <!-- <li><a href="/projects">Projects</a></li>
+          <li><a href="/events">Events</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="/about">About</a></li> -->
+        </ul>
+      </div>
+    </div>
+
+  <!-- Salvattore.js for the masonry layout -->
+  <script type="text/javascript" src="/js/salvattore.min.js"></script>
+  <!-- Salvattore.js for the masonry layout -->
+
+
+
+<!-- <script src="//my.hellobar.com/e9c15cdf31ce7e42008a15bf75ea9d003af5f722.js" type="text/javascript" charset="utf-8" async="async"></script> -->
+
+
+  </body>
+</html>

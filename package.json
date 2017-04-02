@@ -1,7 +1,7 @@
 {
-  "name": "typelevel-website",
+  "name": "yeshwanthk",
   "version": "0.0.0",
-  "description": "The typelevel website.",
+  "description": "Yeshwanth Kumar Blog - Originally designed by typelevel.org",
   "main": "gulpfile.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

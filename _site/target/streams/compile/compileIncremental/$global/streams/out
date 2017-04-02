@@ -1,15 +1,86 @@
 [0m[[0mdebug[0m] [0m[naha] [0m
 [0m[[0mdebug[0m] [0m[naha] Initial source changes: [0m
 [0m[[0mdebug[0m] [0m[naha] 	removed:Set()[0m
-[0m[[0mdebug[0m] [0m[naha] 	added: Set()[0m
+[0m[[0mdebug[0m] [0m[naha] 	added: Set(/home/morpheyesh/code/typelevel.github.com/src/main/scala/YAML.scala, /home/morpheyesh/code/typelevel.github.com/src/main/scala/Main.scala, /home/morpheyesh/code/typelevel.github.com/src/main/scala/package.scala, /home/morpheyesh/code/typelevel.github.com/src/main/scala/Post.scala, /home/morpheyesh/code/typelevel.github.com/src/main/scala/FrontMatter.scala, /home/morpheyesh/code/typelevel.github.com/target/scala-2.11/src_managed/main/sbt-buildinfo/BuildInfo.scala)[0m
 [0m[[0mdebug[0m] [0m[naha] 	modified: Set()[0m
 [0m[[0mdebug[0m] [0m[naha] Invalidated products: Set()[0m
 [0m[[0mdebug[0m] [0m[naha] External API changes: API Changes: Set()[0m
 [0m[[0mdebug[0m] [0m[naha] Modified binary dependencies: Set()[0m
-[0m[[0mdebug[0m] [0m[naha] Initial directly invalidated sources: Set()[0m
+[0m[[0mdebug[0m] [0m[naha] Initial directly invalidated sources: Set(/home/morpheyesh/code/typelevel.github.com/src/main/scala/YAML.scala, /home/morpheyesh/code/typelevel.github.com/src/main/scala/Main.scala, /home/morpheyesh/code/typelevel.github.com/src/main/scala/package.scala, /home/morpheyesh/code/typelevel.github.com/src/main/scala/Post.scala, /home/morpheyesh/code/typelevel.github.com/src/main/scala/FrontMatter.scala, /home/morpheyesh/code/typelevel.github.com/target/scala-2.11/src_managed/main/sbt-buildinfo/BuildInfo.scala)[0m
 [0m[[0mdebug[0m] [0m[naha] [0m
 [0m[[0mdebug[0m] [0m[naha] Sources indirectly invalidated by:[0m
 [0m[[0mdebug[0m] [0m[naha] 	product: Set()[0m
 [0m[[0mdebug[0m] [0m[naha] 	binary dep: Set()[0m
 [0m[[0mdebug[0m] [0m[naha] 	external source: Set()[0m
-[0m[[0mdebug[0m] [0mAll initially invalidated sources: Set()[0m
+[0m[[0mdebug[0m] [0mAll initially invalidated sources: Set(/home/morpheyesh/code/typelevel.github.com/src/main/scala/YAML.scala, /home/morpheyesh/code/typelevel.github.com/src/main/scala/Main.scala, /home/morpheyesh/code/typelevel.github.com/src/main/scala/package.scala, /home/morpheyesh/code/typelevel.github.com/src/main/scala/Post.scala, /home/morpheyesh/code/typelevel.github.com/src/main/scala/FrontMatter.scala, /home/morpheyesh/code/typelevel.github.com/target/scala-2.11/src_managed/main/sbt-buildinfo/BuildInfo.scala)[0m
+[0m[[0mdebug[0m] [0m[naha] Initial set of included nodes: Set(/home/morpheyesh/code/typelevel.github.com/src/main/scala/YAML.scala, /home/morpheyesh/code/typelevel.github.com/src/main/scala/Main.scala, /home/morpheyesh/code/typelevel.github.com/src/main/scala/package.scala, /home/morpheyesh/code/typelevel.github.com/src/main/scala/Post.scala, /home/morpheyesh/code/typelevel.github.com/src/main/scala/FrontMatter.scala, /home/morpheyesh/code/typelevel.github.com/target/scala-2.11/src_managed/main/sbt-buildinfo/BuildInfo.scala)[0m
+[0m[[0mdebug[0m] [0m[naha] Recompiling all 6 sources: invalidated sources (6) exceeded 50.0% of all sources[0m
+[0m[[0minfo[0m] [0mCompiling 6 Scala sources to /home/morpheyesh/code/typelevel.github.com/target/scala-2.11/classes...[0m
+[0m[[0mdebug[0m] [0mGetting org.scala-sbt:compiler-interface:0.13.12:component from component compiler for Scala 2.11.8[0m
+[0m[[0mdebug[0m] [0mGetting org.scala-sbt:compiler-interface:0.13.12:component from component compiler for Scala 2.11.8[0m
+[0m[[0mdebug[0m] [0mRunning cached compiler 361ee455, interfacing (CompilerInterface) with Scala compiler version 2.11.8[0m
+[0m[[0mdebug[0m] [0mCalling Scala compiler with arguments  (CompilerInterface):[0m
+[0m[[0mdebug[0m] [0m	-deprecation[0m
+[0m[[0mdebug[0m] [0m	-feature[0m
+[0m[[0mdebug[0m] [0m	-bootclasspath[0m
+[0m[[0mdebug[0m] [0m	/usr/lib/jvm/java-8-oracle/jre/lib/resources.jar:/usr/lib/jvm/java-8-oracle/jre/lib/rt.jar:/usr/lib/jvm/java-8-oracle/jre/lib/sunrsasign.jar:/usr/lib/jvm/java-8-oracle/jre/lib/jsse.jar:/usr/lib/jvm/java-8-oracle/jre/lib/jce.jar:/usr/lib/jvm/java-8-oracle/jre/lib/charsets.jar:/usr/lib/jvm/java-8-oracle/jre/lib/jfr.jar:/usr/lib/jvm/java-8-oracle/jre/classes:/home/morpheyesh/.ivy2/cache/org.scala-lang/scala-library/jars/scala-library-2.11.8.jar[0m
+[0m[[0mdebug[0m] [0m	-classpath[0m
+[0m[[0mdebug[0m] [0m	/home/morpheyesh/code/typelevel.github.com/target/scala-2.11/classes:/home/morpheyesh/.ivy2/cache/io.get-coursier/coursier_2.11/jars/coursier_2.11-1.0.0-M14.jar:/home/morpheyesh/.ivy2/cache/org.scalaz/scalaz-core_2.11/bundles/scalaz-core_2.11-7.2.5.jar:/home/morpheyesh/.ivy2/cache/com.lihaoyi/fastparse_2.11/jars/fastparse_2.11-0.3.7.jar:/home/morpheyesh/.ivy2/cache/com.lihaoyi/fastparse-utils_2.11/jars/fastparse-utils_2.11-0.3.7.jar:/home/morpheyesh/.ivy2/cache/com.lihaoyi/sourcecode_2.11/jars/sourcecode_2.11-0.1.1.jar:/home/morpheyesh/.ivy2/cache/org.jsoup/jsoup/jars/jsoup-1.9.2.jar:/home/morpheyesh/.ivy2/cache/org.scala-lang.modules/scala-xml_2.11/bundles/scala-xml_2.11-1.0.5.jar:/home/morpheyesh/.ivy2/cache/io.get-coursier/coursier-cache_2.11/jars/coursier-cache_2.11-1.0.0-M14.jar:/home/morpheyesh/.ivy2/cache/org.scalaz/scalaz-concurrent_2.11/bundles/scalaz-concurrent_2.11-7.2.5.jar:/home/morpheyesh/.ivy2/cache/org.scalaz/scalaz-effect_2.11/bundles/scalaz-effect_2.11-7.2.5.jar:/home/morpheyesh/.ivy2/cache/com.chuusai/shapeless_2.11/bundles/shapeless_2.11-2.3.0.jar:/home/morpheyesh/.ivy2/cache/org.typelevel/macro-compat_2.11/jars/macro-compat_2.11-1.1.1.jar:/home/morpheyesh/.ivy2/cache/org.yaml/snakeyaml/bundles/snakeyaml-1.17.jar[0m
+[0m[[0mdebug[0m] [0mScala compilation took 19.440323526 s[0m
+[0m[[0mdebug[0m] [0m[naha] Invalidating /home/morpheyesh/code/typelevel.github.com/src/main/scala/Post.scala...[0m
+[0m[[0mdebug[0m] [0m[naha] Invalidating (transitively) by inheritance from /home/morpheyesh/code/typelevel.github.com/src/main/scala/Post.scala...[0m
+[0m[[0mdebug[0m] [0m[naha] Initial set of included nodes: Set(/home/morpheyesh/code/typelevel.github.com/src/main/scala/Post.scala)[0m
+[0m[[0mdebug[0m] [0m[naha] Invalidated by transitive inheritance dependency: Set(/home/morpheyesh/code/typelevel.github.com/src/main/scala/Post.scala)[0m
+[0m[[0mdebug[0m] [0m[naha] The /home/morpheyesh/code/typelevel.github.com/src/main/scala/Post.scala source file has the following regular definitions changed:[0m
+[0m[[0mdebug[0m] [0m[naha] 	notify, wait, $asInstanceOf, frontMatter, productArity, equals, process, outdated, asInstanceOf, synchronized, $isInstanceOf, canEqual, productPrefix, notifyAll, out, isInstanceOf, <init>, ==, Post, clone, $init$, copy, toString, file, !=, getClass, copy$default$1, ne, eq, productIterator, ##, finalize, productElement, hashCode.[0m
+[0m[[0mdebug[0m] [0m[naha] All member reference dependencies will be considered within this context.[0m
+[0m[[0mdebug[0m] [0m[naha] The following modified names cause invalidation of /home/morpheyesh/code/typelevel.github.com/src/main/scala/Main.scala: Set(process, <init>, Post, file)[0m
+[0m[[0mdebug[0m] [0m[naha] Invalidating /home/morpheyesh/code/typelevel.github.com/src/main/scala/YAML.scala...[0m
+[0m[[0mdebug[0m] [0m[naha] Invalidating (transitively) by inheritance from /home/morpheyesh/code/typelevel.github.com/src/main/scala/YAML.scala...[0m
+[0m[[0mdebug[0m] [0m[naha] Initial set of included nodes: Set(/home/morpheyesh/code/typelevel.github.com/src/main/scala/YAML.scala)[0m
+[0m[[0mdebug[0m] [0m[naha] Invalidated by transitive inheritance dependency: Set(/home/morpheyesh/code/typelevel.github.com/src/main/scala/YAML.scala)[0m
+[0m[[0mdebug[0m] [0m[naha] The /home/morpheyesh/code/typelevel.github.com/src/main/scala/YAML.scala source file has the following implicit definitions changed:[0m
+[0m[[0mdebug[0m] [0m[naha] 	deriveInstance, stringYAML, listYAML, deriveHNil, deriveHCons.[0m
+[0m[[0mdebug[0m] [0m[naha] All member reference dependencies will be considered within this context.[0m
+[0m[[0mdebug[0m] [0m[naha] The following member ref dependencies of /home/morpheyesh/code/typelevel.github.com/src/main/scala/YAML.scala are invalidated:[0m
+[0m[[0mdebug[0m] [0m[naha] 	/home/morpheyesh/code/typelevel.github.com/src/main/scala/Post.scala[0m
+[0m[[0mdebug[0m] [0m[naha] Invalidating /home/morpheyesh/code/typelevel.github.com/src/main/scala/FrontMatter.scala...[0m
+[0m[[0mdebug[0m] [0m[naha] Invalidating (transitively) by inheritance from /home/morpheyesh/code/typelevel.github.com/src/main/scala/FrontMatter.scala...[0m
+[0m[[0mdebug[0m] [0m[naha] Initial set of included nodes: Set(/home/morpheyesh/code/typelevel.github.com/src/main/scala/FrontMatter.scala)[0m
+[0m[[0mdebug[0m] [0m[naha] Invalidated by transitive inheritance dependency: Set(/home/morpheyesh/code/typelevel.github.com/src/main/scala/FrontMatter.scala)[0m
+[0m[[0mdebug[0m] [0m[naha] The /home/morpheyesh/code/typelevel.github.com/src/main/scala/FrontMatter.scala source file has the following regular definitions changed:[0m
+[0m[[0mdebug[0m] [0m[naha] 	notify, wait, libResolution, copy$default$2, $asInstanceOf, productArity, binaryScala, equals, asInstanceOf, synchronized, Tut, $isInstanceOf, canEqual, productPrefix, notifyAll, isInstanceOf, FrontMatter, <init>, invoke, ==, clone, scala, $init$, tut, copy$default$3, copy, toString, !=, getClass, copy$default$1, ne, tutResolution, dependencies, eq, productIterator, ##, finalize, productElement, hashCode.[0m
+[0m[[0mdebug[0m] [0m[naha] All member reference dependencies will be considered within this context.[0m
+[0m[[0mdebug[0m] [0m[naha] The following modified names cause invalidation of /home/morpheyesh/code/typelevel.github.com/src/main/scala/Post.scala: Set(binaryScala, asInstanceOf, Tut, isInstanceOf, FrontMatter, <init>, invoke, ==, scala, tut, copy, toString, ne, dependencies, eq)[0m
+[0m[[0mdebug[0m] [0m[naha] Invalidating /home/morpheyesh/code/typelevel.github.com/src/main/scala/Main.scala...[0m
+[0m[[0mdebug[0m] [0m[naha] Invalidating (transitively) by inheritance from /home/morpheyesh/code/typelevel.github.com/src/main/scala/Main.scala...[0m
+[0m[[0mdebug[0m] [0m[naha] Initial set of included nodes: Set(/home/morpheyesh/code/typelevel.github.com/src/main/scala/Main.scala)[0m
+[0m[[0mdebug[0m] [0m[naha] Invalidated by transitive inheritance dependency: Set(/home/morpheyesh/code/typelevel.github.com/src/main/scala/Main.scala)[0m
+[0m[[0mdebug[0m] [0m[naha] The /home/morpheyesh/code/typelevel.github.com/src/main/scala/Main.scala source file has the following regular definitions changed:[0m
+[0m[[0mdebug[0m] [0m[naha] 	notify, wait, $asInstanceOf, posts, equals, asInstanceOf, executionStart, synchronized, $isInstanceOf, main, notifyAll, isInstanceOf, ==, clone, $init$, Main, toString, args, !=, getClass, ne, eq, delayedInit, ##, finalize, hashCode.[0m
+[0m[[0mdebug[0m] [0m[naha] All member reference dependencies will be considered within this context.[0m
+[0m[[0mdebug[0m] [0m[naha] Invalidating /home/morpheyesh/code/typelevel.github.com/target/scala-2.11/src_managed/main/sbt-buildinfo/BuildInfo.scala...[0m
+[0m[[0mdebug[0m] [0m[naha] Invalidating (transitively) by inheritance from /home/morpheyesh/code/typelevel.github.com/target/scala-2.11/src_managed/main/sbt-buildinfo/BuildInfo.scala...[0m
+[0m[[0mdebug[0m] [0m[naha] Initial set of included nodes: Set(/home/morpheyesh/code/typelevel.github.com/target/scala-2.11/src_managed/main/sbt-buildinfo/BuildInfo.scala)[0m
+[0m[[0mdebug[0m] [0m[naha] Invalidated by transitive inheritance dependency: Set(/home/morpheyesh/code/typelevel.github.com/target/scala-2.11/src_managed/main/sbt-buildinfo/BuildInfo.scala)[0m
+[0m[[0mdebug[0m] [0m[naha] The /home/morpheyesh/code/typelevel.github.com/target/scala-2.11/src_managed/main/sbt-buildinfo/BuildInfo.scala source file has the following regular definitions changed:[0m
+[0m[[0mdebug[0m] [0m[naha] 	notify, tutOutput, wait, $asInstanceOf, productArity, equals, asInstanceOf, synchronized, tutVersion, $isInstanceOf, canEqual, BuildInfo, productPrefix, notifyAll, isInstanceOf, ==, clone, $init$, toString, !=, getClass, ne, eq, productIterator, ##, finalize, productElement, hashCode, tutInput.[0m
+[0m[[0mdebug[0m] [0m[naha] All member reference dependencies will be considered within this context.[0m
+[0m[[0mdebug[0m] [0m[naha] The following modified names cause invalidation of /home/morpheyesh/code/typelevel.github.com/src/main/scala/FrontMatter.scala: Set(tutOutput, asInstanceOf, tutVersion, BuildInfo, isInstanceOf, ==, toString, ne, eq)[0m
+[0m[[0mdebug[0m] [0m[naha] The following modified names cause invalidation of /home/morpheyesh/code/typelevel.github.com/src/main/scala/Main.scala: Set(BuildInfo, tutInput)[0m
+[0m[[0mdebug[0m] [0m[naha] The following modified names cause invalidation of /home/morpheyesh/code/typelevel.github.com/src/main/scala/Post.scala: Set(tutOutput, asInstanceOf, BuildInfo, isInstanceOf, ==, toString, ne, eq)[0m
+[0m[[0mdebug[0m] [0m[naha] Invalidating /home/morpheyesh/code/typelevel.github.com/src/main/scala/package.scala...[0m
+[0m[[0mdebug[0m] [0m[naha] Invalidating (transitively) by inheritance from /home/morpheyesh/code/typelevel.github.com/src/main/scala/package.scala...[0m
+[0m[[0mdebug[0m] [0m[naha] Initial set of included nodes: Set(/home/morpheyesh/code/typelevel.github.com/src/main/scala/package.scala)[0m
+[0m[[0mdebug[0m] [0m[naha] Invalidated by transitive inheritance dependency: Set(/home/morpheyesh/code/typelevel.github.com/src/main/scala/package.scala)[0m
+[0m[[0mdebug[0m] [0m[naha] The /home/morpheyesh/code/typelevel.github.com/src/main/scala/package.scala source file has the following implicit definitions changed:[0m
+[0m[[0mdebug[0m] [0m[naha] 	eitherToTry.[0m
+[0m[[0mdebug[0m] [0m[naha] All member reference dependencies will be considered within this context.[0m
+[0m[[0mdebug[0m] [0m[naha] The following member ref dependencies of /home/morpheyesh/code/typelevel.github.com/src/main/scala/package.scala are invalidated:[0m
+[0m[[0mdebug[0m] [0m[naha] 	/home/morpheyesh/code/typelevel.github.com/src/main/scala/FrontMatter.scala[0m
+[0m[[0mdebug[0m] [0m[naha] New invalidations:[0m
+[0m[[0mdebug[0m] [0m[naha] 	Set()[0m
+[0m[[0mdebug[0m] [0m[naha] Initial set of included nodes: Set()[0m
+[0m[[0mdebug[0m] [0m[naha] Previously invalidated, but (transitively) depend on new invalidations:[0m
+[0m[[0mdebug[0m] [0m[naha] 	Set()[0m
+[0m[[0mdebug[0m] [0m[naha] All newly invalidated sources after taking into account (previously) recompiled sources:Set()[0m

@@ -1,4 +1,4 @@
-package org.typelevel.blog
+package yeshwanthk.blog
 
 import org.yaml.snakeyaml.Yaml
 import scala.collection.JavaConverters._

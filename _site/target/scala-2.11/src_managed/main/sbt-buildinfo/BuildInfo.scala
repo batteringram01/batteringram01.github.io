@@ -1,4 +1,4 @@
-package org.typelevel.blog
+package yeshwanthk.blog
 
 import scala.Predef._
 
